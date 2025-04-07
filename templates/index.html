@@ -145,26 +145,23 @@
       <div class="logo">
         <img class="myimg" src="{{ url_for('static', filename='img.png') }}" alt="">
       </div>
-      <a class="navbar-brand" href="#">Health Center</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" title="m">
+      <a class="navbar-brand text-white" href="#">Health Center</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" title="menu">
         <span class="navbar-toggler-icon"></span>
       </button>
-
+  
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
-          <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
-          <li class="nav-item"><a class="nav-link" href="/developer">Developer</a></li>
-          <li class="nav-item"><a class="nav-link" href="/blog">Blog</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="#">Home</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="/about">About</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="/contact">Contact</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="/developer">Developer</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="/blog">Blog</a></li>
         </ul>
-        <form class="d-flex" role="search">
-          <input class="form-control me-2" type="search" placeholder="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
       </div>
     </div>
   </nav>
+ 
 
   <!-- Main Form -->
   <div class="container mt-5">
@@ -172,7 +169,7 @@
     <form action="/predict" method="post">
       <div class="form-group mb-3">
         <label for="symptoms">Select Symptoms:</label>
-        <input type="text" class="form-control" id="symptoms" name="symptoms" placeholder="E.g., itching, sleeping, aching">
+        <input type="text" class="form-control" id="symptoms" name="symptoms" placeholder="E.g., itching, aching, acidity, chills, etc." required>
       </div>
 
       <button type="button" id="startSpeechRecognition" class="btn btn-primary mb-3">Start Speech Recognition</button>
@@ -204,6 +201,115 @@
   {% endif %}
 
   <!-- [Modal code remains unchanged — just make sure it's included after this] -->
+   <!-- Disease Modal -->
+   <div class="modal fade" id="diseaseModal" tabindex="-1" aria-labelledby="diseaseModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" > <!-- Set header background color inline -->
+                <h5 class="modal-title" id="diseaseModalLabel">Predicted Disease</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" > <!-- Set modal body background color inline -->
+                <p>{{ predicted_disease }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Description Modal -->
+<div class="modal fade" id="descriptionModal" tabindex="-1" aria-labelledby="descriptionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" >
+                <h5 class="modal-title" id="descriptionModalLabel">Description</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>{{ dis_des }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Precaution Modal -->
+<div class="modal fade" id="precautionModal" tabindex="-1" aria-labelledby="precautionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" >
+                <h5 class="modal-title" id="precautionModalLabel">Precaution</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul>
+                    {% for i in my_precautions %}
+                        <li>{{ i }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Medications Modal -->
+<div class="modal fade" id="medicationsModal" tabindex="-1" aria-labelledby="medicationsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" >
+                <h5 class="modal-title" id="medicationsModalLabel">Medications</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul>
+                    {% for i in medications %}
+                        <li>{{ i }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Workouts Modal -->
+<div class="modal fade" id="workoutsModal" tabindex="-1" aria-labelledby="workoutsModalLabel" aria-hidden="true">
+    <div class="modal-dialog" >
+        <div class="modal-content">
+            <div class="modal-header" >
+                <h5 class="modal-title" id="workoutsModalLabel">Workouts</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul>
+                    {% for i in workout %}
+                        <li>{{ i }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Diets Modal -->
+<div class="modal fade" id="dietsModal" tabindex="-1" aria-labelledby="dietsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" >
+                <h5 class="modal-title" id="dietsModalLabel">Diets</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul>
+                    {% for i in my_diet %}
+                        <li>{{ i }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
 
   <!-- JS -->
   <script>
