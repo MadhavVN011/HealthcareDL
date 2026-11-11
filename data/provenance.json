@@ -1,0 +1,61 @@
+{
+  "checked_on": "2026-11-11",
+  "method": "Public publisher API metadata and complete archive comparison",
+  "findings": [
+    {
+      "material": "Training.csv",
+      "source_label": "Kaggle \u00b7 KAUSHIL268",
+      "source_url": "https://www.kaggle.com/datasets/kaushil268/disease-prediction-using-machine-learning",
+      "summary": "All 4,920 rows and headers match after removing the publisher's final empty column.",
+      "comparison": "table_exact_after_empty_column_removal",
+      "rows": 4920,
+      "local_sha256": "cc00c869b702c0c90eef3c1fb4d0b54f16965f8def2dec7e1bf91d0b76480ac3",
+      "remote_sha256": "4ec0d80a829b1588b5b3290d29051017783992bec8331c93255a41660aa43f58"
+    },
+    {
+      "material": "Publisher's Testing.csv",
+      "source_label": "Same publisher",
+      "source_url": "https://www.kaggle.com/datasets/kaushil268/disease-prediction-using-machine-learning",
+      "summary": "41 of 42 rows already appear in this project's original training table. Not an independent patient benchmark.",
+      "comparison": "overlap_audit",
+      "rows": 42,
+      "overlap_rows": 41,
+      "remote_sha256": "f4f8e2eefad5401948aa355d082d9f51c7f0546f9f01fd836e5bbd964d7bad21"
+    },
+    {
+      "material": "Archived severity table",
+      "source_label": "Kaggle \u00b7 Pranay Patil",
+      "source_url": "https://www.kaggle.com/datasets/itachi9604/disease-symptom-description-dataset",
+      "summary": "Exact byte-for-byte match with the publisher's Symptom-severity.csv.",
+      "comparison": "byte_exact",
+      "sha256": "cb5a84b5ebde81bb18738b7e7733bcbc5abdc667b4376893fb1774d8c444bc8d"
+    }
+  ],
+  "sources": [
+    {
+      "ref": "kaushil268/disease-prediction-using-machine-learning",
+      "publisher_name": "KAUSHIL268",
+      "title": "Disease Prediction Using Machine Learning",
+      "version": 1,
+      "url": "https://www.kaggle.com/datasets/kaushil268/disease-prediction-using-machine-learning",
+      "declared_license": "Database: Open Database, Contents: Database Contents",
+      "metadata_api": "https://www.kaggle.com/api/v1/datasets/list?search=disease-prediction-using-machine-learning",
+      "archive_sha256": "b78d66edfe9e30b6b11e919d2a6b322db73b9c17c2c4ca3b14bf6c43b287c415"
+    },
+    {
+      "ref": "itachi9604/disease-symptom-description-dataset",
+      "publisher_name": "Pranay Patil",
+      "title": "Disease Symptom  Prediction",
+      "version": 2,
+      "url": "https://www.kaggle.com/datasets/itachi9604/disease-symptom-description-dataset",
+      "declared_license": "CC BY-SA 4.0",
+      "metadata_api": "https://www.kaggle.com/api/v1/datasets/list?search=disease-symptom-description-dataset",
+      "archive_sha256": "327bd46217bbeeafc30c8b0e1670fff620205fd1f15df210cf607055d9493efd"
+    }
+  ],
+  "limits": [
+    "File identity does not establish original clinical collection, consent, or ownership.",
+    "Publisher-declared licenses are recorded as evidence, not legal certification.",
+    "The associated Testing.csv is not independent clinical validation."
+  ]
+}
