@@ -31,6 +31,7 @@ def test_chest_bundle_and_split_provenance():
     public = ROOT / "public/static/models/chest-ct"
     report = json.loads((ROOT / "artifacts/chest_ct/report.json").read_text())
     summary = json.loads((public / "report.json").read_text())
+    assert json.loads((ROOT / "artifacts/chest_ct_runtime.json").read_text()) == summary
     assert hashlib.sha256((public / "model.onnx").read_bytes()).hexdigest() == summary["model_sha256"]
     assert summary["dataset"]["patient_disjoint"] is False
     assert summary["dataset"]["license"] == "CC BY-NC-SA 4.0"
@@ -42,6 +43,23 @@ def test_chest_bundle_and_split_provenance():
     assert matrix.sum() == report["test"]["count"] == 496
     assert summary["test"] == report["test"]
     assert report["onnx_max_abs_error"] < 0.0001
+
+
+def test_ct_controls_work_without_public_files_in_server_bundle(app, monkeypatch, tmp_path):
+    import main
+    monkeypatch.setattr(main, "ROOT", tmp_path)
+    response = app.test_client().get("/reports")
+    assert response.status_code == 200
+    assert b'data-unavailable="true"' not in response.data
+    assert b"96.8%" in response.data
+
+
+def test_missing_ct_runtime_report_disables_only_ct_controls(app, tmp_path):
+    app.config["CT_REPORT_PATH"] = tmp_path / "missing.json"
+    response = app.test_client().get("/reports")
+    assert response.status_code == 200
+    assert b'data-unavailable="true"' in response.data
+    assert b'Try fictional example' in response.data
 
 
 def test_vendored_medical_assets_have_pinned_checksums_and_licenses():

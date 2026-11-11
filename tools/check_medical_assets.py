@@ -14,6 +14,8 @@ def check():
             raise ValueError(f"Medical dependency checksum mismatch: {row['file']}")
     folder = ROOT / "public/static/models/chest-ct"
     report = json.loads((folder / "report.json").read_text())
+    if json.loads((ROOT / "artifacts/chest_ct_runtime.json").read_text()) != report:
+        raise ValueError("Server and browser CT metadata differ")
     if hashlib.sha256((folder / "model.onnx").read_bytes()).hexdigest() != report["model_sha256"]:
         raise ValueError("CT export/report checksum mismatch")
     if report["classes"] != ["comparator", "covid_associated"] or report["dataset"]["patient_disjoint"] is not False:

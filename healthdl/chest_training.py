@@ -210,7 +210,12 @@ def train_chest(archive_path, output, seed=20, epochs=180, patience=25):
     report["examples"] = examples
     (output / "report.json").write_text(json.dumps(report, indent=2) + "\n")
     summary = {key: value for key, value in report.items() if key not in {"split_hashes", "history"}}
-    (public / "report.json").write_text(json.dumps(summary, indent=2) + "\n")
+    summary_text = json.dumps(summary, indent=2) + "\n"
+    (public / "report.json").write_text(summary_text)
+    runtime_report = (ROOT / "artifacts/chest_ct_runtime.json"
+                      if output.resolve() == (ROOT / "artifacts/chest_ct").resolve()
+                      else output / "runtime_report.json")
+    runtime_report.write_text(summary_text)
     print(json.dumps({"epochs_run": len(history), "best_epoch": best_epoch, "test": report["test"],
                       "model_bytes": (public / "model.onnx").stat().st_size, "onnx_max_abs_error": max(errors)}, indent=2), flush=True)
     return report

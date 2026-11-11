@@ -18,6 +18,7 @@ def create_app(config=None):
     application = Flask(__name__, static_folder="public/static", static_url_path="/static")
     application.config.from_mapping(
         ARTIFACT_DIR=ROOT / "artifacts", MAX_CONTENT_LENGTH=8192,
+        CT_REPORT_PATH=ROOT / "artifacts/chest_ct_runtime.json",
         DEBUG=False, TESTING=False,
         ENABLE_HSTS=os.environ.get("HEALTHDL_HTTPS", "0") == "1",
     )
@@ -87,7 +88,8 @@ def create_app(config=None):
     @application.get("/reports")
     def medical_reports():
         try:
-            ct_report = json.loads((ROOT / "public/static/models/chest-ct/report.json").read_text())
+            # Vercel serves public/ from its CDN, outside the function filesystem.
+            ct_report = json.loads(Path(application.config["CT_REPORT_PATH"]).read_text())
         except (OSError, ValueError):
             ct_report = None
         return render_template("reports.html", ct_report=ct_report)

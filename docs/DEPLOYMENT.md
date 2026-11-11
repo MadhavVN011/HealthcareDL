@@ -14,13 +14,15 @@ After publishing, unauthenticated checks confirmed the health endpoint and JSON 
 
 The theme update adds a shared light/dark switch, device-preference detection, browser-local persistence, cross-tab synchronization, and themed controls, charts, and result states. All 96 automated checks passed. Accessibility audits of 24 states across both themes found no WCAG A/AA violations or horizontal overflow. Theme initialization uses an external script compatible with the existing content security policy and applies the preference before the stylesheet loads. The privacy page documents the single stored theme preference.
 
-The report workspace adds local PDF/image blood-report extraction and a separate browser-based chest CT research classifier. All 142 automated checks passed before the source update, including real image/scanned-PDF OCR and browser/PyTorch numerical agreement. The imaging training stack and raw CT archive are excluded from the web function. The server still requires only Flask and NumPy; WebAssembly, model, and language assets are served from `public/static/`. Selected medical files are not uploaded. The new workflow is reviewed on `development` before merging into `main` for production.
+The report workspace adds local PDF/image blood-report extraction and a separate browser-based chest CT research classifier. All 144 automated checks passed before the source update, including real image/scanned-PDF OCR and browser/PyTorch numerical agreement. The imaging training stack and raw CT archive are excluded from the web function. The server still requires only Flask and NumPy; WebAssembly, model, and language assets are served from `public/static/`. Selected medical files are not uploaded. The new workflow is reviewed on `development` before merging into `main` for production.
 
 Vercel installs the runtime dependencies declared in `pyproject.toml`; these must stay aligned with `requirements.txt`. The application was deployed from the local working tree through the CLI. Source updates are pushed to `development` and reviewed through a pull request into `main`; merging to `main` lets the connected Vercel project deploy the reviewed source.
 
 ## Vercel — primary target
 
 The application follows [Vercel's Flask deployment](https://vercel.com/docs/frameworks/backend/flask): a top-level `app` in `main.py`, a Python 3.12 runtime, and assets under `public/static/` so the platform can serve them from its CDN. A custom domain is optional; Vercel supplies a deployment address and managed HTTPS.
+
+The server reads the compact CT metadata from `artifacts/chest_ct_runtime.json`. Keep it identical to `public/static/models/chest-ct/report.json`; training exports both, and the asset checker verifies equality. Files under `public/` are served separately by the CDN and must not be assumed to exist in the function filesystem. Docker also copies the compact metadata into its runtime image.
 
 The runtime requirements contain only Flask and NumPy. Training remains in PyTorch. Training exports every dense-layer parameter to `artifacts/inference.npz`; serving executes the same matrix operations and ReLU activations with dropout inactive. Automated tests compare its logits against the PyTorch model on all 304 unique patterns. This does not replace the model with a classical classifier.
 
