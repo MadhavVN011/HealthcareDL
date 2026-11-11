@@ -24,3 +24,6 @@ compose.yaml
 train.py
 evaluate.py
 healthdl/evaluation.py
+healthdl/chest_training.py
+artifacts/chest_ct/
+requirements-imaging-training.txt

@@ -8,7 +8,7 @@ COPY main.py ./
 COPY templates/ ./templates/
 COPY public/ ./public/
 COPY data/conditions.json data/provenance.json ./data/
-COPY artifacts/metadata.json artifacts/inference.npz artifacts/training_patterns.npz artifacts/report.json ./artifacts/
+COPY artifacts/metadata.json artifacts/inference.npz artifacts/training_patterns.npz artifacts/report.json artifacts/chest_ct_runtime.json ./artifacts/
 COPY deploy/gunicorn.conf.py ./deploy/
 USER 10001
 EXPOSE 8080

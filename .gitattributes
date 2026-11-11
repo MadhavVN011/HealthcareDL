@@ -1,0 +1,6 @@
+public/static/vendor/** -text -whitespace linguist-vendored
+public/static/models/** linguist-generated
+artifacts/** linguist-generated
+*.pdf binary
+artifacts/chest_ct/*LICENSE.txt -text -whitespace
+public/static/models/chest-ct/*LICENSE.txt -text -whitespace

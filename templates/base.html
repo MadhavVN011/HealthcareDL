@@ -11,6 +11,7 @@
   <script src="{{ url_for('static', filename='theme.js') }}"></script>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+  {% block page_scripts %}{% endblock %}
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -20,7 +21,7 @@
     <div id="sidebar-navigation" class="sidebar-navigation">
       <p class="nav-label">WORKSPACE</p>
       <nav aria-label="Main navigation" class="nav-links">
-        {% for endpoint,label,symbol in [('index','Explore','grid'),('model_details','Model & results','chart'),('data_details','Data & sources','data'),('blog','How it works','book')] %}
+        {% for endpoint,label,symbol in [('index','Explore','grid'),('medical_reports','Report analysis','file'),('model_details','Model & results','chart'),('data_details','Data & sources','data'),('blog','How it works','book')] %}
         <a href="{{ url_for(endpoint) }}" {% if request.endpoint == endpoint or endpoint == 'index' and request.endpoint == 'predict_form' %}class="active" aria-current="page"{% endif %}>{{ icon(symbol) }}<span>{{ label }}</span>{% if endpoint == 'index' %}<span class="nav-dot"></span>{% endif %}</a>
         {% endfor %}
       </nav>

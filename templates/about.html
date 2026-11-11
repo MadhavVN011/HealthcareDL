@@ -11,6 +11,7 @@
   <p>The supplied training file contains 4,920 rows but only 304 unique symptom patterns. The table has been matched to a public publisher release, and its declared license is documented. Original clinical collection and patient-level provenance have not been established. High scores on these patterns do not establish performance on real patients.</p>
   <p><a href="{{ url_for('data_details') }}">Read the source comparisons and evidence status.</a></p>
   <h2>Health information</h2>
+  <p>The <a href="{{ url_for('medical_reports') }}">report workspace</a> adds local blood-report text extraction and printed-range comparisons, plus a separate chest CT research classifier. The CT model is limited to two dataset patterns in rendered chest slices. Neither workflow diagnoses a patient, interprets every possible report, or inherits the symptom model's evaluation scores.</p>
   <p>Condition descriptions link to MedlinePlus, the US National Library of Medicine's public health information service. These educational summaries have not undergone clinical review for this project. The demo does not provide prescriptions, medication rankings, or personalized diet and exercise plans.</p>
 </article>
 {% endblock %}
