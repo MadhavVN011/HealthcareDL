@@ -14,6 +14,12 @@ Disease labels use stable catalog IDs. Explicit aliases cover legacy misspelling
 
 Each category's unique patterns are shuffled with a seeded generator and partitioned approximately 60/20/20. With seed 20 this yields 182 training, 61 validation, and 61 test patterns. The generated report records hashes for every pattern in each partition. The model's unfamiliar-input reference contains training patterns only.
 
+## Training augmentation
+
+The 182 original training patterns generate 913 unique single-positive-symptom deletion variants, for 1,095 training examples. Candidates matching any original pattern (including validation/test) are excluded, as are synthetic patterns with conflicting labels; at least three positive symptoms remain. Variants are downweighted so that collectively they have at most the original examples' weight within each category. The unfamiliar-input reference retains only original training patterns.
+
+These are synthetic examples, not new patients or an enlarged clinical cohort. The candidate SymbiPredict table has 4,961 rows but the same 304 binary patterns; it adds no new patterns and is not merged. See [the expansion protocol](DATA_EXPANSION.md).
+
 ## What is unknown
 
 A public file-level source has now been identified and publisher license declarations recorded in `data/SOURCES.md` and `data/provenance.json`. The repository still does not establish original clinical collection, consent, geography, time period, patient identifiers, or clinical verification. The data must not be described as a representative patient cohort or a clinically validated dataset. Repetition and separability are observable; they do not establish how the data was generated.

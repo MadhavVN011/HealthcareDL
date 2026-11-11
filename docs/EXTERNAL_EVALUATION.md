@@ -4,7 +4,7 @@ The included held-out test is a pattern-level split of one repetitive table. A p
 
 ## Prepared evaluation workflow
 
-`evaluate.py` accepts an external binary symptom CSV with the model's complete feature schema and a `prognosis` label column. Known source spelling aliases and duplicate feature columns are normalized with the same rules as training. Optional patient IDs can be supplied using `--group-column`. The command checks schema and labels, reports overlap with every original train/validation/test pattern, and refuses to calculate independent metrics if any overlap exists. Patient IDs are counted, never written to the report.
+`evaluate.py` accepts an external binary symptom CSV with the model's complete feature schema and a `prognosis` label column. Known source spelling aliases and duplicate feature columns are normalized with the same rules as training. Optional patient IDs can be supplied using `--group-column`. The command checks schema and labels, reports overlap with every original train/validation/test pattern and every synthetic training variant, and refuses to calculate independent metrics if any overlap exists. Patient IDs are counted, never written to the report.
 
 No external patient records are bundled in this repository. Put approved data under ignored `data/external/` and retain the source's access and license records separately. Unknown columns and missing features are rejected; they are not silently imputed or mapped using guessed medical equivalences.
 

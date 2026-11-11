@@ -33,14 +33,14 @@ def test_chest_bundle_and_split_provenance():
     summary = json.loads((public / "report.json").read_text())
     assert json.loads((ROOT / "artifacts/chest_ct_runtime.json").read_text()) == summary
     assert hashlib.sha256((public / "model.onnx").read_bytes()).hexdigest() == summary["model_sha256"]
-    assert summary["dataset"]["patient_disjoint"] is False
-    assert summary["dataset"]["license"] == "CC BY-NC-SA 4.0"
+    assert summary["dataset"]["patient_disjoint"] is True
+    assert summary["dataset"]["license"] == "CC0-1.0"
     partitions = [set(values) for values in report["split_hashes"].values()]
     assert all(not left & right for i, left in enumerate(partitions) for right in partitions[i+1:])
-    assert sum(map(len, partitions)) == report["dataset"]["unique_images"] == 2479
+    assert sum(map(len, partitions)) == report["dataset"]["unique_images"] == 4169
     matrix = np.array(report["test"]["confusion_matrix"])
     assert matrix.trace() / matrix.sum() == report["test"]["accuracy"]
-    assert matrix.sum() == report["test"]["count"] == 496
+    assert matrix.sum() == report["test"]["count"] == 833
     assert summary["test"] == report["test"]
     assert report["onnx_max_abs_error"] < 0.0001
 
@@ -51,7 +51,7 @@ def test_ct_controls_work_without_public_files_in_server_bundle(app, monkeypatch
     response = app.test_client().get("/reports")
     assert response.status_code == 200
     assert b'data-unavailable="true"' not in response.data
-    assert b"96.8%" in response.data
+    assert b"83.7%" in response.data
 
 
 def test_missing_ct_runtime_report_disables_only_ct_controls(app, tmp_path):
@@ -186,8 +186,9 @@ def test_ct_file_classification_requires_confirmation_and_does_not_upload(live_u
     page.get_by_role("button", name="Analyze CT slice").click()
     expect(page.locator("#ct-results")).to_be_visible(timeout=60000)
     expect(page.locator("#ct-result-label")).to_have_text("Comparator dataset pattern")
-    expect(page.locator("#ct-result-accuracy")).to_have_text("96.8%")
-    assert "496" in page.locator("#ct-result-support").inner_text()
+    expect(page.locator("#ct-result-accuracy")).to_have_text("83.7%")
+    assert "833" in page.locator("#ct-result-support").inner_text()
+    assert "42" in page.locator("#ct-result-support").inner_text()
     assert page.evaluate("document.documentElement.scrollWidth <= innerWidth")
     page.get_by_role("button", name="Clear image and results").click()
     assert page.locator("#ct-preview").get_attribute("src") is None

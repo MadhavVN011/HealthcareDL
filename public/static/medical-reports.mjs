@@ -362,7 +362,7 @@ async function analyzeCt(file, example = null) {
     byId("ct-result-accuracy").textContent =
       `${(metadata.test.accuracy * 100).toFixed(1)}%`;
     byId("ct-result-support").textContent =
-      `${metadata.test.count} held-out dataset images; not a patient-separated evaluation.`;
+      `${metadata.test.count} held-out images from ${metadata.partition_summary.test.patient_folders} publisher patient folders; no external clinical validation.`;
     byId("ct-results").hidden = false;
     byId("ct-status").textContent =
       "Local classification finished. Your image was not uploaded.";

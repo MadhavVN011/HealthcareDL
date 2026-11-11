@@ -4,7 +4,7 @@
   "functions": {
     "main.py": {
       "maxDuration": 30,
-      "excludeFiles": "{tests/**,docs/**,tools/**,deploy/**,data/legacy/**,data/external/**,Training.csv,*.ipynb,healthdl/{training,model,evaluation,chest_training}.py,train.py,evaluate.py,artifacts/model.pt,artifacts/chest_ct/**}"
+      "excludeFiles": "{tests/**,docs/**,tools/**,deploy/**,data/legacy/**,data/external/**,Training.csv,*.ipynb,healthdl/{training,model,evaluation,chest_training,chest_data}.py,train.py,evaluate.py,artifacts/model.pt,artifacts/chest_ct/**}"
     }
   },
   "headers": [

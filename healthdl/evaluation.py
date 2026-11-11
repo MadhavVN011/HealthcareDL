@@ -52,6 +52,7 @@ def evaluate_external(data_path: Path, artifact_dir: Path = ROOT / "artifacts", 
             raise ValueError("Patient/group identifiers must not be empty")
         patient_count = len(set(ids))
     known = {value for values in report["split_pattern_ids"].values() for value in values}
+    known.update(report.get("augmentation", {}).get("synthetic_pattern_ids", []))
     overlap = sum(pattern_id(row) in known for row in x)
     result = {
         "source_sha256": file_hash(data_path), "model_dataset_sha256": report["dataset_sha256"],
@@ -60,7 +61,7 @@ def evaluate_external(data_path: Path, artifact_dir: Path = ROOT / "artifacts", 
         "scope": "External pattern evaluation; clinical provenance and patient independence are not established by this command.",
     }
     if overlap:
-        result.update(status="rejected_overlap", message="Data overlaps the original development patterns. Independent metrics were not calculated.")
+        result.update(status="rejected_overlap", message="Data overlaps original development patterns or synthetic training variants. Independent metrics were not calculated.")
         return result
     probabilities = predictor.model.probabilities(x)
     result.update(status="evaluated", classifier=metrics(y, probabilities, predictor.class_ids))

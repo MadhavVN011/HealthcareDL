@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "created_on": "2026-11-11",
+  "baseline_commit": "af7223c73865ca779fb41eec902d256aa6ecc760",
+  "symptoms": {
+    "original_unique_patterns": 304,
+    "split_sizes": {
+      "train": 182,
+      "validation": 61,
+      "test": 61
+    },
+    "baseline_test": {
+      "accuracy": 1.0,
+      "macro_f1": 1.0
+    },
+    "baseline_missing_one_symptom_test": {
+      "accuracy": 1.0,
+      "macro_f1": 1.0
+    },
+    "plan": "Keep original seed-20 partitions. Add only train-derived single-positive-symptom deletion variants with at least three remaining positives. Exclude every original pattern and all conflicting synthetic labels. Give augmentation half the total training weight within each class. Retain original training references and serving thresholds. Select checkpoints on original validation loss; evaluate original test and existing synthetic stress check once.",
+    "patient_records_added": 0,
+    "baseline_partition_membership_sha256": {
+      "train": "2faac52690e59281ff608cf1511d60be20cfdd13fd785553661113542a54ab0a",
+      "validation": "41e33623a6b3a92971dcc7cfa4cbe6b218dd761a5f75a1e3864139344f54696f",
+      "test": "8749bd90626765f011a4e3aa202e92c441e91fd039ec34409817c43abde251d8"
+    }
+  },
+  "chest_ct": {
+    "old_unique_images": 2479,
+    "old_split_unit": "image",
+    "old_image_test_accuracy": 0.967741935483871,
+    "plan": "Replace the smaller Kaggle release with the same authors larger Harvard release. Deduplicate RGB pixels, reject conflicting labels and duplicates across patient folders. Split patient folders 60/20/20 within Covid/Healthy/Others using seed 20. Train the same frozen encoder and head with existing hyperparameters, checkpoint on validation loss, then evaluate the held-out patient-folder split once. Do not compare accuracy as an improvement over the former image split.",
+    "external_validation": false
+  },
+  "rejected_candidates": [
+    {
+      "title": "SymbiPredict",
+      "source": "https://data.mendeley.com/datasets/dv5z3v2xyd/1",
+      "doi": "10.17632/dv5z3v2xyd.1",
+      "publisher": "Jay Tucker",
+      "declared_license": "CC BY 4.0",
+      "download_url": "https://data.mendeley.com/public-files/datasets/dv5z3v2xyd/files/72d80d7b-a027-480c-99a7-c3dd3815bdf1/file_downloaded",
+      "sha256": "9834c90dd48eb2fef1fa56282f8f016a6781b0e4ada878015dc34a81af8e9e1b",
+      "raw_rows": 4961,
+      "unique_binary_patterns": 304,
+      "shared_with_original": 304,
+      "new_binary_patterns": 0,
+      "decision": "Not merged: no new binary patterns; also has two labels outside the current catalog. No independent patient evidence is added."
+    }
+  ]
+}

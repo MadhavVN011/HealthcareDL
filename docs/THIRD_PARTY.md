@@ -16,8 +16,8 @@ The browser workspace bundles these dependencies so uploaded documents are not s
 
 Credit: **Eduardo Soares, Plamen Angelov, Sarah Biaso, Michele Higa Froes, and Daniel Kanda Abe**, *SARS-CoV-2 CT-scan dataset: A large dataset of real patients CT scans for SARS-CoV-2 identification* (2020), [doi:10.1101/2020.04.24.20078584](https://doi.org/10.1101/2020.04.24.20078584).
 
-The [Kaggle publisher release](https://www.kaggle.com/datasets/plameneduardo/sarscov2-ctscan-dataset) declares **CC BY-NC-SA 4.0**. The archive's checksum, declared license, source, authors, and download size are recorded in `data/chest_ct_sources.json`. The preprint has its own terms; its text/images are not bundled here.
+The current [Harvard Dataverse release by Eduardo Soares and Plamen Angelov](https://doi.org/10.7910/DVN/SZDUQX) declares **CC0 1.0**. Its archive checksum, declared license, source, authors, size, and patient-folder protocol are recorded in `data/chest_ct_sources.json`. The preprint has its own terms; its text/images are not bundled here.
 
-The two CT walkthrough images are reencoded validation-set images from that release. Image resizing/normalization is used for model inference. Keep attribution and the CC BY-NC-SA terms with these examples and the CT research artifacts; the project does not expand the publisher's permissions or establish permission for clinical/commercial use. Other inherited assets retain their separate provenance and terms.
+The two current CT walkthrough images are reencoded validation images from that Harvard release. Current CT weights are newly trained using that release. The previous Kaggle source declared CC BY-NC-SA 4.0; its record is preserved under `previous_release` for older artifacts in Git history. This update does not change the terms of those older files or grant rights in other inherited materials. Backbone weights and other datasets retain their separate terms.
 
 The original dataset archive and complete image collection are excluded from Git and web deployment. Fictional blood-report examples were authored for this project and contain no real patient information.

@@ -18,20 +18,23 @@ Limits: 10 MB per file, at most five PDF pages, English-language recognition, at
 
 The classifier accepts a single **rendered axial chest CT slice in PNG/JPEG format**. It does not read DICOM studies or interpret other body regions, X-rays, photos, lung tumors, emboli, or all possible lung conditions. A user confirms the supported input type before running an uploaded image. There is no validated automatic domain detector.
 
-The neural network uses a frozen ImageNet-pretrained MobileNetV3 Small encoder, 576 normalized features, and a trained 64-unit ReLU/dropout classification head. The feature mean and scale come only from the training partition. CPU training uses seed 20, AdamW, cross-entropy, and validation-loss checkpoint selection. The selected run completed 43 epochs and selected epoch 18. Training does not use the test partition for updates or checkpoint selection.
+The neural network uses a frozen ImageNet-pretrained MobileNetV3 Small encoder, 576 normalized features, and a trained 64-unit ReLU/dropout classification head. The feature mean and scale come only from the training partition. CPU training uses seed 20, AdamW, cross-entropy, and validation-loss checkpoint selection. The selected run completed 27 epochs and selected epoch 2. Training does not use the test partition for updates or checkpoint selection.
 
-The source is the [SARS-CoV-2 CT-scan dataset](https://www.kaggle.com/datasets/plameneduardo/sarscov2-ctscan-dataset). Three pixel-identical duplicates were removed from 2,482 images before a stratified **1,487 / 496 / 496 image split**. The downloaded archive does not provide the patient identifiers needed for a patient-separated split. Related slices from the same person can occur in different partitions; image-level results can therefore be optimistic. This is not independent patient validation or clinical performance.
+The source is the larger [Soares–Angelov Harvard Dataverse release](https://doi.org/10.7910/DVN/SZDUQX), declared CC0 1.0. Its 4,173 archive entries contain **4,171 images and two non-image files**; the text report and shortcut are ignored and never opened. Removing two exact pixel duplicates leaves **4,169 images across 210 publisher patient folders**. No conflicting image labels or duplicate pixels across patient folders were found.
+
+Patient folders are stratified by the original Covid/Healthy/Others categories and kept together in a **126 / 42 / 42 folder split**, yielding **2,472 / 864 / 833 images**. Healthy and Others map to the comparator class. Folder identifiers are hashed in the report; publisher identity assignments have not been independently verified. This is internal patient-folder separation, not an external hospital or clinical evaluation. The former 2,479-image model used an image split; its score is not directly comparable.
 
 | Held-out image metric | Measured value |
 |---|---:|
-| Accuracy | 96.77% (480 / 496) |
-| Balanced accuracy | 96.77% |
-| Macro F1 | 0.9677 |
-| ROC AUC | 0.9956 |
+| Accuracy | 83.67% (697 / 833) |
+| Balanced accuracy | 83.67% |
+| Macro F1 | 0.8367 |
+| ROC AUC | 0.9184 |
+| Held-out patient folders | 42 |
 
 The classes are **COVID-associated dataset pattern** and **comparator dataset pattern**. Comparator does not mean healthy, COVID-negative, or free from other diseases. Softmax scores are uncalibrated; the 70% abstention threshold is a fixed research heuristic. A low score returns no selected class. The displayed evaluation accuracy describes the dataset, not the uploaded image's correctness.
 
-The complete selected checkpoint is `artifacts/chest_ct/model.pt`; the full report records split hashes, history, versions, and metrics. The 3.9 MB ONNX export and a compact report are under `public/static/models/chest-ct/`. ONNX Runtime Web 1.31.1 executes the network in the visitor's browser using single-threaded CPU WebAssembly. A SHA-256 check detects a mismatched model/report bundle; it is not a signature or an authenticity guarantee. Browser preprocessing and logits are checked against recorded PyTorch outputs. The initial two example images come from validation, are reencoded as PNG, and are not independent evaluation cases.
+The complete selected checkpoint is `artifacts/chest_ct/model.pt`; the full report records split pixel hashes, hashed patient-folder membership, history, versions, and metrics. The 3.9 MB ONNX export and a compact report are under `public/static/models/chest-ct/`. ONNX Runtime Web 1.31.1 executes the network in the visitor's browser using single-threaded CPU WebAssembly. A SHA-256 check detects a mismatched model/report bundle; it is not a signature or an authenticity guarantee. Browser preprocessing and logits are checked against recorded PyTorch outputs. The initial two example images come from validation, are reencoded as PNG, and are not independent evaluation cases.
 
 ### Reproduce CT training
 
@@ -39,8 +42,8 @@ Download the public publisher archive into the ignored `data/external/chest_ct/`
 
 ```bash
 mkdir -p data/external/chest_ct
-curl -L https://www.kaggle.com/api/v1/datasets/download/plameneduardo/sarscov2-ctscan-dataset \
-  -o data/external/chest_ct/sarscov2-ctscan-dataset.zip
+curl -fL "https://dataverse.harvard.edu/api/access/datafile/3877939?format=original&download=1" \
+  -o data/external/chest_ct/harvard-covid_ctscan.zip
 python -m pip install -r requirements-imaging-training.txt
 python tools/train_chest_ct.py
 ```

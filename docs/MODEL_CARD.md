@@ -8,7 +8,7 @@ Educational study of multiclass classification on the supplied symptom table. Th
 
 A CPU PyTorch MLP maps 131 binary features to 41 category logits through 128-unit and 64-unit hidden layers, each followed by ReLU and dropout at 0.15. Training uses AdamW (learning rate 0.003, weight decay 0.001), cross-entropy loss, batch size 32, seed 20, at most 400 epochs, and validation-loss early stopping with patience 40 and minimum improvement 0.0001.
 
-Exact duplicates are removed before a stratified per-category split. There are 182 training, 61 validation, and 61 held-out test patterns; no identical pattern is shared between partitions. The selected checkpoint is epoch 112; training stopped at epoch 152. Test labels are not used in gradient updates or checkpoint selection. The serving reference contains only training patterns.
+Exact duplicates are removed before a stratified per-category split. There are 182 training, 61 validation, and 61 held-out test patterns; no identical pattern is shared between partitions. The selected checkpoint is epoch 71; training stopped at epoch 111. Test labels are not used in gradient updates or checkpoint selection. The serving reference contains only the 182 original training patterns. Training adds 913 synthetic single-positive-symptom deletion variants (1,095 examples total), excludes every original pattern and ambiguous synthetic label, and retains at least three positive symptoms. Synthetic variants carry at most half the weight within each category and add no new patient observations. The original 61/61 validation/test partitions remain unchanged.
 
 ## Results from the included run
 
@@ -21,7 +21,7 @@ Exact duplicates are removed before a stratified per-category split. There are 1
 
 The network does not demonstrate an improvement over the SVC baseline on these examples. The neural architecture fulfills the project's deep learning implementation, not a claim that deeper models are inherently better for this dataset.
 
-Held-out neural log loss is approximately 0.00165 and multiclass Brier score approximately 0.000128. These scores on this small, highly separable table do not establish probability calibration in a clinical population. The JSON report includes full per-category precision, recall, support, confusion matrices, split hashes, and learning history.
+Held-out neural log loss is 6.62382e-05 and multiclass Brier score 1.12098e-07. These scores on this small, highly separable table do not establish probability calibration in a clinical population. The JSON report includes full per-category precision, recall, support, confusion matrices, split hashes, and learning history.
 
 With the fixed serving policy, 46 of 61 test patterns return an educational match and 15 return an urgent-care message. Match coverage is 75.4%, with 100% accuracy among those 46 returned matches against the dataset labels. These urgent messages are not evaluated or validated as clinical triage outcomes. Classifier metrics and serving-policy coverage measure different behavior and must be reported separately.
 

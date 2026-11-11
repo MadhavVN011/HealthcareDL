@@ -33,6 +33,39 @@ class TrainConfig:
     patience: int = 40
     batch_size: int = 32
     learning_rate: float = 0.003
+    augment_missing_symptoms: bool = True
+
+
+def augment_training(dataset, train_indices):
+    """Delete one positive symptom from training rows; never fabricate new patients."""
+    original = {pattern_id(row) for row in dataset.x}
+    candidates, ambiguous = {}, set()
+    excluded_original = 0
+    for index in train_indices:
+        row, label = dataset.x[index], int(dataset.y[index])
+        if row.sum() <= 3:
+            continue
+        for feature in np.flatnonzero(row):
+            masked = row.copy()
+            masked[feature] = 0
+            key = pattern_id(masked)
+            if key in original:
+                excluded_original += 1
+                continue
+            if key in candidates and candidates[key][1] != label:
+                ambiguous.add(key)
+            else:
+                candidates[key] = (masked, label)
+    accepted = sorted(set(candidates) - ambiguous)
+    extra_x = np.array([candidates[key][0] for key in accepted], dtype=np.float32).reshape(-1, len(dataset.features))
+    extra_y = np.array([candidates[key][1] for key in accepted], dtype=np.int64)
+    return extra_x, extra_y, {
+        "kind": "training_only_single_positive_symptom_deletion", "minimum_remaining_symptoms": 3,
+        "original_training_patterns": len(train_indices), "synthetic_training_patterns": len(accepted),
+        "ambiguous_patterns_discarded": len(ambiguous), "original_pattern_candidates_discarded": excluded_original,
+        "synthetic_pattern_ids": accepted, "new_patient_records": 0,
+        "note": "Synthetic variants are not new observations or independent validation. All original patterns are excluded from augmentation.",
+    }
 
 
 def metrics(y, probabilities, class_ids):
@@ -70,6 +103,25 @@ def train(config: TrainConfig | None = None) -> dict:
     y = torch.from_numpy(dataset.y)
     train_indices = torch.from_numpy(split["train"])
     val_indices = torch.from_numpy(split["validation"])
+    if config.augment_missing_symptoms:
+        extra_x, extra_y, augmentation = augment_training(dataset, split["train"])
+    else:
+        extra_x = np.empty((0, len(dataset.features)), dtype=np.float32)
+        extra_y = np.empty(0, dtype=np.int64)
+        augmentation = {"kind": "disabled", "original_training_patterns": len(train_indices),
+                        "synthetic_training_patterns": 0, "synthetic_pattern_ids": [], "new_patient_records": 0}
+    fit_x = torch.cat([x[train_indices], torch.from_numpy(extra_x)])
+    fit_y = torch.cat([y[train_indices], torch.from_numpy(extra_y)])
+    weights = torch.ones(len(fit_y))
+    # Within each category, synthetic rows collectively carry at most the weight
+    # of the original training rows, regardless of symptom-list length.
+    for label in range(len(dataset.class_ids)):
+        extra_indexes = torch.nonzero(fit_y[len(train_indices):] == label, as_tuple=True)[0] + len(train_indices)
+        if len(extra_indexes):
+            weights[extra_indexes] = int((y[train_indices] == label).sum()) / len(extra_indexes)
+    weights /= weights.mean()
+    augmentation["training_examples_total"] = len(fit_y)
+    augmentation["synthetic_weight_fraction"] = float(weights[len(train_indices):].sum() / weights.sum())
     model = SymptomNetwork(len(dataset.features), len(dataset.class_ids))
     optimizer = torch.optim.AdamW(model.parameters(), lr=config.learning_rate, weight_decay=0.001)
     criterion = nn.CrossEntropyLoss()
@@ -77,17 +129,20 @@ def train(config: TrainConfig | None = None) -> dict:
     best_loss, best_epoch, stale = float("inf"), 0, 0
     for epoch in range(1, config.epochs + 1):
         model.train()
-        order = train_indices[torch.randperm(len(train_indices))]
+        order = torch.randperm(len(fit_y))
         for indices in order.split(config.batch_size):
             optimizer.zero_grad()
-            loss = criterion(model(x[indices]), y[indices])
+            logits = model(fit_x[indices])
+            loss = ((nn.functional.cross_entropy(logits, fit_y[indices], reduction="none") * weights[indices]).mean()
+                    if len(extra_x) else criterion(logits, fit_y[indices]))
             loss.backward()
             optimizer.step()
         model.eval()
         with torch.inference_mode():
-            train_logits = model(x[train_indices])
+            train_logits = model(fit_x)
             val_logits = model(x[val_indices])
-            train_loss = criterion(train_logits, y[train_indices]).item()
+            train_loss = ((nn.functional.cross_entropy(train_logits, fit_y, reduction="none") * weights).mean().item()
+                          if len(extra_x) else criterion(train_logits, fit_y).item())
             val_loss = criterion(val_logits, y[val_indices]).item()
             val_accuracy = (val_logits.argmax(1) == y[val_indices]).float().mean().item()
         if not np.isfinite([train_loss, val_loss]).all():
@@ -128,6 +183,7 @@ def train(config: TrainConfig | None = None) -> dict:
         "merged_columns": dataset.merged_columns,
         "split_sizes": {name: len(indices) for name, indices in split.items()},
         "pattern_overlap": 0, "split_pattern_ids": hashes,
+        "augmentation": augmentation,
         "best_epoch": best_epoch, "epochs_run": len(history), "history": history,
         "config": {k: str(v) if isinstance(v, Path) else v for k, v in asdict(config).items()},
         "versions": {"python": platform.python_version(), "torch": str(torch.__version__),
@@ -145,6 +201,7 @@ def train(config: TrainConfig | None = None) -> dict:
             "Related symptom templates may remain across partitions.",
             "Softmax scores are uncalibrated; no clinical accuracy or safety is established.",
             "Missing-symptom testing is synthetic, not a clinical evaluation.",
+            "Training augmentation deletes one observed symptom from original training patterns; it adds no patient records or clinical evidence.",
         ],
     }
     output = Path(config.output_dir)
