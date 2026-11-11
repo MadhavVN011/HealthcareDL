@@ -1,0 +1,42 @@
+{% from 'icons.html' import icon %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f9fb">
+  <meta name="description" content="HealthcareDL: an open research workspace for exploring symptom patterns with deep learning.">
+  <title>{% block title %}Symptom Explorer · HealthcareDL{% endblock %}</title>
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='mark.svg') }}">
+  <script src="{{ url_for('static', filename='theme.js') }}"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <aside class="sidebar">
+    <a class="brand" href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='mark.svg') }}" alt="" width="40" height="40"><span>Healthcare<span class="brand-dl">DL</span><small>Deep learning research</small></span></a>
+    <button class="mobile-toggle icon-button" id="mobile-toggle" type="button" aria-expanded="false" aria-controls="sidebar-navigation" aria-label="Toggle navigation">{{ icon('menu') }}</button>
+    <div id="sidebar-navigation" class="sidebar-navigation">
+      <p class="nav-label">WORKSPACE</p>
+      <nav aria-label="Main navigation" class="nav-links">
+        {% for endpoint,label,symbol in [('index','Explore','grid'),('model_details','Model & results','chart'),('data_details','Data & sources','data'),('blog','How it works','book')] %}
+        <a href="{{ url_for(endpoint) }}" {% if request.endpoint == endpoint or endpoint == 'index' and request.endpoint == 'predict_form' %}class="active" aria-current="page"{% endif %}>{{ icon(symbol) }}<span>{{ label }}</span>{% if endpoint == 'index' %}<span class="nav-dot"></span>{% endif %}</a>
+        {% endfor %}
+      </nav>
+      <p class="nav-label second-label">PROJECT</p>
+      <nav aria-label="Project navigation" class="nav-links">
+        {% for endpoint,label,symbol in [('about','About','info'),('developer','Project','code'),('contact','Support','help')] %}
+        <a href="{{ url_for(endpoint) }}" {% if request.endpoint == endpoint %}class="active" aria-current="page"{% endif %}>{{ icon(symbol) }}<span>{{ label }}</span></a>
+        {% endfor %}
+      </nav>
+      <div class="sidebar-bottom"><div class="research-note">{{ icon('book',18) }}<strong>Built for exploration</strong><p>A learning workspace.<br>Not a clinical service.</p></div><div class="sidebar-version"><span class="status-dot {% if not model_ready %}offline{% endif %}"></span>{{ 'Model available' if model_ready else 'Model unavailable' }}<span>v{{ app_version }}</span></div></div>
+    </div>
+  </aside>
+  <div class="app-shell">
+    <header class="topbar"><div class="breadcrumb">Workspace<span>/</span><strong>{% block breadcrumb %}Symptom explorer{% endblock %}</strong></div><div class="topbar-actions"><button type="button" id="theme-toggle" class="theme-toggle" role="switch" aria-checked="false" aria-label="Dark theme" title="Switch to dark theme" hidden><span class="theme-sun">{{ icon('sun',16) }}</span><span class="theme-moon">{{ icon('moon',16) }}</span><span id="theme-label">Light</span><span class="theme-track" aria-hidden="true"><span></span></span></button><span class="research-badge">{{ icon('code',14) }} Research build</span></div></header>
+    <main id="main" class="page">{% block content %}{% endblock %}</main>
+    <footer class="footer"><span>HealthcareDL <span class="footer-dot">·</span> An educational deep learning project</span><div><a href="{{ url_for('privacy') }}">Privacy</a><a href="{{ url_for('data_details') }}">Data transparency</a><a href="https://github.com/MadhavVN011/HealthcareDL" target="_blank" rel="noopener noreferrer">Repository {{ icon('external',12) }}</a></div></footer>
+  </div>
+</body>
+</html>

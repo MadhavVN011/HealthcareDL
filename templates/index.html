@@ -1,331 +1,62 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Health Care Center</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
-
-  <style>
-    body {
-      background-color: #f5f5f5;
-      color: #000;
-    }
-
-    .container, .modal-content {
-      background-color: #ffffff;
-      border-radius: 15px;
-      padding: 30px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .logo {
-      width: 50px;
-      height: 50px;
-    }
-
-    .myimg {
-      width: 50px;
-      height: 50px;
-      border: 2px solid black;
-      border-radius: 25px;
-    }
-
-    h1 {
-      color: #2c3e50;
-    }
-
-    .toggle-button {
-      margin: 5px;
-      padding: 10px 15px;
-      background-color: #3498db;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      transition: 0.3s ease;
-    }
-
-    .toggle-button:hover {
-      background-color: #2c80b4;
-    }
-
-    .form-control {
-      border-radius: 8px;
-    }
-  </style>
-  <style>
-    body {
-      background-color: #f8f9fa;
-      color: #000000;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-  
-    .navbar,
-    .modal-content {
-      color: #000000;
-    }
-  
-    h1, h2, h3, h4, h5, h6, p, label, .nav-link, .form-control, .btn, .modal-body, .modal-title, ul li {
-      color: #000000 !important;
-    }
-  
-    .container {
-      background-color: #ffffff;
-      border-radius: 12px;
-      padding: 30px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
-    }
-  
-    .form-control {
-      border-radius: 8px;
-      border: 1px solid #ced4da;
-    }
-  
-    .btn {
-      border-radius: 8px;
-      font-weight: 500;
-    }
-  
-    .btn-primary {
-      background-color: #007bff;
-      border-color: #007bff;
-    }
-  
-    .btn-primary:hover {
-      background-color: #0056b3;
-      border-color: #004e9a;
-    }
-  
-    .btn-danger {
-      background-color: #dc3545;
-      border-color: #dc3545;
-    }
-  
-    .btn-danger:hover {
-      background-color: #bd2130;
-      border-color: #b21f2d;
-    }
-  
-    .toggle-button {
-      margin: 5px;
-      padding: 10px 16px;
-      background-color: #198754;
-      color: #ffffff;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-  
-    .toggle-button:hover {
-      background-color: #146c43;
-    }
-  
-    #transcription {
-      min-height: 40px;
-      padding: 10px;
-      border: 1px solid #ced4da;
-      border-radius: 8px;
-      background-color: #fff;
-    }
-  
-    .myimg {
-      width: 50px;
-      height: 50px;
-      border: 2px solid black;
-      border-radius: 25px;
-    }
-  </style>
-  
-</head>
-
-<body>
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-      <div class="logo">
-        <img class="myimg" src="{{ url_for('static', filename='img.png') }}" alt="">
-      </div>
-      <a class="navbar-brand text-white" href="#">Health Center</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" title="menu">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-  
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item"><a class="nav-link text-white" href="#">Home</a></li>
-          <li class="nav-item"><a class="nav-link text-white" href="/about">About</a></li>
-          <li class="nav-item"><a class="nav-link text-white" href="/contact">Contact</a></li>
-          <li class="nav-item"><a class="nav-link text-white" href="/developer">Developer</a></li>
-          <li class="nav-item"><a class="nav-link text-white" href="/blog">Blog</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
- 
-
-  <!-- Main Form -->
-  <div class="container mt-5">
-    <h1 class="text-center mb-4">Health Care Center</h1>
-    <form action="/predict" method="post">
-      <div class="form-group mb-3">
-        <label for="symptoms">Select Symptoms:</label>
-        <input type="text" class="form-control" id="symptoms" name="symptoms" placeholder="E.g., itching, aching, acidity, chills, etc." required>
-      </div>
-
-      <button type="button" id="startSpeechRecognition" class="btn btn-primary mb-3">Start Speech Recognition</button>
-
-      <!-- Transcribed text -->
-      <div id="transcription" class="form-control mb-3" ></div>
-
-      {% if message %}
-      {{ message }}
-      {% endif %}
-
-      <button type="submit" class="btn btn-danger btn-lg w-100">Predict</button>
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-heading"><div><p class="eyebrow"><span class="tiny-line"></span>SYMPTOM EXPLORER</p><h1>Explore symptom patterns<span class="accent">.</span></h1><p class="page-description">Explore how a neural network connects symptoms to examples in a learning dataset.</p></div><a class="text-link heading-link" href="{{ url_for('blog') }}">How it works {{ icon('arrow',16) }}</a></div>
+<div class="scope-note">{{ icon('info',18) }}<p><strong>For learning and research.</strong> This demo cannot diagnose illness or recommend treatment.</p><a href="{{ url_for('about') }}">Understand the limits {{ icon('external',13) }}</a></div>
+<div class="workspace-grid">
+  <section class="card explorer-card" aria-labelledby="form-title">
+    <div class="card-heading"><div class="section-number">01</div><div><h2 id="form-title">Build your symptom list</h2><p>Select the entries you want to explore.</p></div><span class="subtle-label">INPUT</span></div>
+    {% if not available %}<p class="error" role="alert">The demo is temporarily unavailable. Please try again later.</p>{% endif %}
+    {% if message %}<p class="error" role="alert">{{ message }}</p>{% endif %}
+    <form action="{{ url_for('predict_form') }}#exploration-result" method="post" id="explorer-form">
+      <fieldset {% if not available %}disabled{% endif %}>
+        <legend class="visually-hidden">Symptoms to explore</legend>
+        <div class="demo-examples" aria-labelledby="examples-title">
+          <div class="examples-heading"><h3 id="examples-title">Try a demo example</h3><span class="subtle-label">ONE CLICK</span></div>
+          <p class="field-hint">Fictional symptom sets for a walkthrough. Running an example replaces your current selection.</p>
+          <div class="example-buttons">{% for example in demo_examples %}<button type="submit" name="example" value="{{ example.id }}" class="example-button" aria-label="Run {{ example.label }} example"><strong>{{ example.label }} {{ icon('arrow',14) }}</strong><span>{{ example.symptoms|length }} symptoms</span></button>{% endfor %}</div>
+        </div>
+        {% if available %}<p class="input-requirement" id="minimum-help">Use at least <strong>{{ minimum_symptoms }} different symptoms</strong> to explore a pattern. A dataset match is not guaranteed.</p>{% endif %}
+        <div id="search-panel" hidden>
+          <label for="symptom-search">Find a symptom</label>
+          <div class="search-field">{{ icon('search',19) }}<input type="search" id="symptom-search" placeholder="Search symptoms, e.g. headache" autocomplete="off" aria-describedby="search-help"></div>
+          <p class="field-hint" id="search-help">Search by name. Spaces and underscores both work.</p>
+          <div id="symptom-search-results" class="search-results" aria-label="Matching symptom names" hidden>{% for symptom in symptoms %}<button type="button" class="search-result" data-symptom="{{ symptom }}">{{ symptom.replace('_',' ') }}<span>+</span></button>{% endfor %}<p id="no-search-results" hidden>No matching names. Try another symptom.</p></div>
+          <div class="quick-label">QUICK ADD</div><div class="quick-symptoms">{% for symptom in ['itching','skin_rash','headache','fatigue'] %}{% if symptom in symptoms %}<button type="button" class="quick-symptom" data-symptom="{{ symptom }}">{{ icon('plus',13) }}{{ symptom.replace('_',' ') }}</button>{% endif %}{% endfor %}</div>
+          <div class="selection-heading"><label id="selected-label">Selected symptoms <span class="count-badge" id="selected-count">0</span></label><button type="button" id="clear-symptoms" class="quiet-button">Clear all</button></div>
+          <div id="selected-symptoms" class="selected-symptoms" role="group" aria-labelledby="selected-label"></div>
+          <p class="field-hint">Only include symptoms you have. More entries do not guarantee a better result.</p>
+        </div>
+        <details id="manual-entry" class="manual-entry" open><summary>Enter names manually</summary><label for="symptoms">Your symptom list</label><textarea id="symptoms" name="symptoms" rows="2" maxlength="3000" aria-describedby="symptoms-help minimum-help" placeholder="itching, skin rash, nodal skin eruptions">{{ submitted }}</textarea><p id="symptoms-help" class="field-hint">Separate names with commas. Repeated names count once. Unknown names will be flagged for correction.</p></details>
+        <details class="manual-entry browse-entry"><summary>Browse all available names</summary><div class="picker" id="picker"><select id="symptom-picker" aria-label="Available symptoms"><option value="">Choose a symptom</option>{% for symptom in symptoms %}<option value="{{ symptom }}">{{ symptom.replace('_',' ') }}</option>{% endfor %}</select><button type="button" id="add-symptom" class="secondary">Add symptom</button></div><noscript><p>{% for symptom in symptoms %}{{ symptom.replace('_',' ') }}{% if not loop.last %}, {% endif %}{% endfor %}</p></noscript></details>
+        <div class="form-actions"><button type="submit" class="primary-button" id="explore-button">Explore pattern {{ icon('arrow',17) }}</button></div>
+        <details class="voice"><summary>{{ icon('mic',15) }} Optional voice input</summary><p class="field-hint">Your browser may send audio to its speech service. Use this only if you are comfortable with that. Say names separated by “comma,” then check the text before submitting.</p><button type="button" id="startSpeechRecognition" class="secondary" hidden>Use microphone</button><p id="transcription" class="field-hint" role="status" aria-live="polite">Voice input requires JavaScript and a browser with speech recognition support.</p></details>
+      </fieldset>
     </form>
-  </div>
-
-  {% if predicted_disease %}
-  <!-- Results -->
-  <div class="container mt-5">
-    <h2 class="text-center mb-3">Our AI System Results</h2>
-    <div class="text-center">
-      <button class="toggle-button" data-bs-toggle="modal" data-bs-target="#diseaseModal">Disease</button>
-      <button class="toggle-button" data-bs-toggle="modal" data-bs-target="#descriptionModal">Description</button>
-      <button class="toggle-button" data-bs-toggle="modal" data-bs-target="#precautionModal">Precaution</button>
-      <button class="toggle-button" data-bs-toggle="modal" data-bs-target="#medicationsModal">Medications</button>
-      <button class="toggle-button" data-bs-toggle="modal" data-bs-target="#workoutsModal">Workouts</button>
-      <button class="toggle-button" data-bs-toggle="modal" data-bs-target="#dietsModal">Diets</button>
-    </div>
-  </div>
-  {% endif %}
-
-  <!-- [Modal code remains unchanged — just make sure it's included after this] -->
-   <!-- Disease Modal -->
-   <div class="modal fade" id="diseaseModal" tabindex="-1" aria-labelledby="diseaseModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header" > <!-- Set header background color inline -->
-                <h5 class="modal-title" id="diseaseModalLabel">Predicted Disease</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" > <!-- Set modal body background color inline -->
-                <p>{{ predicted_disease }}</p>
-            </div>
-        </div>
-    </div>
+    <div class="privacy-inline">{{ icon('lock',14) }}<span>The app does not save your symptom submissions.</span><a href="{{ url_for('privacy') }}">Privacy details</a></div>
+  </section>
+  <section class="card result-card {% if result %}result-{{ result.status }}{% endif %}" id="exploration-result" aria-labelledby="result-title" aria-live="polite">
+    <div class="card-heading"><div class="section-number">02</div><div><h2 id="result-title">Your exploration</h2><p>A result with context, not a diagnosis.</p></div><span class="subtle-label">OUTPUT</span></div>
+    {% if result %}
+      {% if active_example %}<p class="example-notice">Demo example: <strong>{{ active_example.label }}</strong> · Fictional input</p>{% endif %}
+      {% if result.status == 'match' %}
+      <div class="result-body"><span class="result-badge">{{ icon('check',14) }} Dataset match</span><h3 class="condition-title">Dataset match: {{ result.condition.label }}</h3><p class="result-description">{{ result.condition.description }}</p>
+        <dl class="result-metrics">
+          <div><dt>Model score</dt><dd><strong>{{ '%.1f'|format(result.model_score * 100) }}<small>%</small></strong><p>Uncalibrated network score, not the chance of illness.</p></dd></div>
+          <div><dt>Held-out test accuracy</dt><dd>{% if result.evaluation is defined %}<strong>{{ '%.1f'|format(result.evaluation.accuracy * 100) }}<small>%</small></strong><p>Measured on {{ result.evaluation.test_patterns }} unique dataset test patterns.</p>{% else %}<strong class="metric-unavailable">Unavailable</strong><p>The evaluation report could not be loaded.</p>{% endif %}</dd></div>
+        </dl>
+        <p class="metric-context">Test accuracy describes this small dataset, not the correctness of your result. <a href="{{ url_for('model_details') }}">View evaluation details</a></p>
+        <div class="interpretation"><strong>What this means</strong><p>{{ result.message }} A healthcare professional can help assess your symptoms.</p></div><a class="resource-link" href="{{ result.condition.source }}" target="_blank" rel="noopener noreferrer"><span>{{ icon('book',18) }}<span><strong>Learn about {{ result.condition.label }}</strong><small>MedlinePlus · National Library of Medicine</small></span></span>{{ icon('external',16) }}</a><p class="field-hint">Do not start or stop medicines based on this result.</p></div>
+      {% elif result.status == 'urgent' %}
+      <div class="result-body"><span class="result-badge urgent-badge">{{ icon('alert',14) }} Care information</span><h3 class="condition-title">Seek urgent medical assessment</h3><p role="alert">{{ result.message }}</p><div class="interpretation"><strong>Do not wait for a prediction</strong><p>This demo does not provide emergency care. Contact your local emergency service if you think you may have a medical emergency.</p></div></div>
+      {% else %}
+      <div class="result-body"><span class="result-badge neutral-badge">{{ icon('info',14) }} {{ 'More context needed' if result.status == 'insufficient' else 'No match returned' }}</span><h3 class="condition-title">{{ 'More symptoms needed' if result.status == 'insufficient' else 'No reliable dataset match' }}</h3><p>{{ result.message }}</p><a class="text-link" href="#examples-title">Try a fictional demo example {{ icon('arrow',15) }}</a><div class="interpretation"><strong>A result has limits</strong><p>This dataset covers a small set of example patterns. An uncertain result cannot rule out a health concern.</p></div></div>
+      {% endif %}
+    {% else %}
+      <div class="empty-result"><div class="network-illustration" aria-hidden="true"><svg viewBox="0 0 300 150" fill="none"><g stroke="var(--accent-line)"><path d="M60 40 150 25 240 55M60 40l90 50 90-35M60 110l90-85m-90 85 90-20 90 20M150 25l90 85M150 90l90-35M60 40l90 95 90-25M60 110l90 25"/></g><g fill="var(--surface-accent)" stroke="var(--accent-line)"><circle cx="60" cy="40" r="12"/><circle cx="60" cy="110" r="12"/><circle cx="150" cy="25" r="12"/><circle cx="150" cy="90" r="12"/><circle cx="150" cy="135" r="12"/></g><circle cx="240" cy="55" r="15" fill="var(--green)"/><circle cx="240" cy="110" r="12" fill="var(--surface-hover)" stroke="var(--accent-line)"/><path d="m234 55 4 4 7-8" stroke="var(--on-accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h3>Your exploration starts here</h3><p>Add symptoms on the left, then explore how they relate to the learning dataset.</p><div class="empty-steps"><span><b>1</b> Select symptoms</span><span><b>2</b> Explore pattern</span><span><b>3</b> Read the context</span></div></div>
+    {% endif %}
+    <div class="result-footnote">{{ icon('info',15) }}<p>Results reflect examples in a small dataset. They do not establish clinical accuracy.</p></div>
+  </section>
 </div>
-
-
-<!-- Description Modal -->
-<div class="modal fade" id="descriptionModal" tabindex="-1" aria-labelledby="descriptionModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header" >
-                <h5 class="modal-title" id="descriptionModalLabel">Description</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>{{ dis_des }}</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Precaution Modal -->
-<div class="modal fade" id="precautionModal" tabindex="-1" aria-labelledby="precautionModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header" >
-                <h5 class="modal-title" id="precautionModalLabel">Precaution</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <ul>
-                    {% for i in my_precautions %}
-                        <li>{{ i }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-
-<!-- Medications Modal -->
-<div class="modal fade" id="medicationsModal" tabindex="-1" aria-labelledby="medicationsModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header" >
-                <h5 class="modal-title" id="medicationsModalLabel">Medications</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <ul>
-                    {% for i in medications %}
-                        <li>{{ i }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Workouts Modal -->
-<div class="modal fade" id="workoutsModal" tabindex="-1" aria-labelledby="workoutsModalLabel" aria-hidden="true">
-    <div class="modal-dialog" >
-        <div class="modal-content">
-            <div class="modal-header" >
-                <h5 class="modal-title" id="workoutsModalLabel">Workouts</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <ul>
-                    {% for i in workout %}
-                        <li>{{ i }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Diets Modal -->
-<div class="modal fade" id="dietsModal" tabindex="-1" aria-labelledby="dietsModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header" >
-                <h5 class="modal-title" id="dietsModalLabel">Diets</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <ul>
-                    {% for i in my_diet %}
-                        <li>{{ i }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
-
-  <!-- JS -->
-  <script>
-    const startSpeechRecognitionButton = document.getElementById('startSpeechRecognition');
-    const transcriptionDiv = document.getElementById('transcription');
-
-    startSpeechRecognitionButton.addEventListener('click', () => {
-      const recognition = new webkitSpeechRecognition();
-      recognition.lang = 'en-US';
-      recognition.onresult = event => {
-        transcriptionDiv.textContent = event.results[0][0].transcript;
-      };
-      recognition.start();
-    });
-  </script>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+<div class="project-stats"><div class="stat-intro"><span class="eyebrow">BEHIND THE MODEL</span><p>A small dataset.<br>A transparent approach.</p></div><div><strong>131</strong><span>Input features</span></div><div><strong>41</strong><span>Dataset categories</span></div><div><strong>304</strong><span>Unique patterns</span></div><a class="text-link" href="{{ url_for('model_details') }}">Explore the model {{ icon('arrow',16) }}</a></div>
+<div class="urgent-note">{{ icon('alert',17) }}<p>For chest pain, trouble breathing, or sudden weakness or speech changes, seek urgent medical care. Do not wait for this demo.</p></div>
+{% endblock %}

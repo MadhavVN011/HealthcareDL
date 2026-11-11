@@ -1,0 +1,252 @@
+{
+  "checked_at_utc": "2026-11-11T05:51:41.448762+00:00",
+  "scope": "Reference URL availability only; not factual or clinical approval.",
+  "results": [
+    {
+      "condition_id": "fungal_infection",
+      "url": "https://medlineplus.gov/fungalinfections.html",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/fungalinfections.html"
+    },
+    {
+      "condition_id": "allergy",
+      "url": "https://medlineplus.gov/allergy.html",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/allergy.html"
+    },
+    {
+      "condition_id": "gerd",
+      "url": "https://medlineplus.gov/gerd.html",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/gerd.html"
+    },
+    {
+      "condition_id": "chronic_cholestasis",
+      "url": "https://medlineplus.gov/ency/article/000215.htm",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/ency/article/000215.htm"
+    },
+    {
+      "condition_id": "drug_reaction",
+      "url": "https://medlineplus.gov/drugreactions.html",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/drugreactions.html"
+    },
+    {
+      "condition_id": "peptic_ulcer",
+      "url": "https://medlineplus.gov/pepticulcer.html",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/pepticulcer.html"
+    },
+    {
+      "condition_id": "aids",
+      "url": "https://medlineplus.gov/hiv.html",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/hiv.html"
+    },
+    {
+      "condition_id": "diabetes",
+      "url": "https://medlineplus.gov/diabetes.html",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/diabetes.html"
+    },
+    {
+      "condition_id": "gastroenteritis",
+      "url": "https://medlineplus.gov/gastroenteritis.html",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/gastroenteritis.html"
+    },
+    {
+      "condition_id": "asthma",
+      "url": "https://medlineplus.gov/asthma.html",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/asthma.html"
+    },
+    {
+      "condition_id": "hypertension",
+      "url": "https://medlineplus.gov/highbloodpressure.html",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/highbloodpressure.html"
+    },
+    {
+      "condition_id": "migraine",
+      "url": "https://medlineplus.gov/migraine.html",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/migraine.html"
+    },
+    {
+      "condition_id": "cervical_spondylosis",
+      "url": "https://medlineplus.gov/ency/article/000436.htm",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/ency/article/000436.htm"
+    },
+    {
+      "condition_id": "brain_hemorrhage",
+      "url": "https://medlineplus.gov/ency/article/000726.htm",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/ency/article/000726.htm"
+    },
+    {
+      "condition_id": "jaundice",
+      "url": "https://medlineplus.gov/jaundice.html",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/jaundice.html"
+    },
+    {
+      "condition_id": "malaria",
+      "url": "https://medlineplus.gov/malaria.html",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/malaria.html"
+    },
+    {
+      "condition_id": "chickenpox",
+      "url": "https://medlineplus.gov/chickenpox.html",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/chickenpox.html"
+    },
+    {
+      "condition_id": "dengue",
+      "url": "https://medlineplus.gov/dengue.html",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/dengue.html"
+    },
+    {
+      "condition_id": "typhoid",
+      "url": "https://medlineplus.gov/ency/article/001332.htm",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/ency/article/001332.htm"
+    },
+    {
+      "condition_id": "hepatitis_a",
+      "url": "https://medlineplus.gov/hepatitisa.html",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/hepatitisa.html"
+    },
+    {
+      "condition_id": "hepatitis_b",
+      "url": "https://medlineplus.gov/hepatitisb.html",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/hepatitisb.html"
+    },
+    {
+      "condition_id": "hepatitis_c",
+      "url": "https://medlineplus.gov/hepatitisc.html",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/hepatitisc.html"
+    },
+    {
+      "condition_id": "hepatitis_d",
+      "url": "https://medlineplus.gov/ency/article/000216.htm",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/ency/article/000216.htm"
+    },
+    {
+      "condition_id": "hepatitis_e",
+      "url": "https://medlineplus.gov/hepatitis.html",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/hepatitis.html"
+    },
+    {
+      "condition_id": "alcoholic_hepatitis",
+      "url": "https://medlineplus.gov/ency/article/000281.htm",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/ency/article/000281.htm"
+    },
+    {
+      "condition_id": "tuberculosis",
+      "url": "https://medlineplus.gov/tuberculosis.html",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/tuberculosis.html"
+    },
+    {
+      "condition_id": "common_cold",
+      "url": "https://medlineplus.gov/commoncold.html",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/commoncold.html"
+    },
+    {
+      "condition_id": "pneumonia",
+      "url": "https://medlineplus.gov/pneumonia.html",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/pneumonia.html"
+    },
+    {
+      "condition_id": "hemorrhoids",
+      "url": "https://medlineplus.gov/hemorrhoids.html",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/hemorrhoids.html"
+    },
+    {
+      "condition_id": "heart_attack",
+      "url": "https://medlineplus.gov/heartattack.html",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/heartattack.html"
+    },
+    {
+      "condition_id": "varicose_veins",
+      "url": "https://medlineplus.gov/varicoseveins.html",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/varicoseveins.html"
+    },
+    {
+      "condition_id": "hypothyroidism",
+      "url": "https://medlineplus.gov/hypothyroidism.html",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/hypothyroidism.html"
+    },
+    {
+      "condition_id": "hyperthyroidism",
+      "url": "https://medlineplus.gov/hyperthyroidism.html",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/hyperthyroidism.html"
+    },
+    {
+      "condition_id": "hypoglycemia",
+      "url": "https://medlineplus.gov/hypoglycemia.html",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/hypoglycemia.html"
+    },
+    {
+      "condition_id": "osteoarthritis",
+      "url": "https://medlineplus.gov/osteoarthritis.html",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/osteoarthritis.html"
+    },
+    {
+      "condition_id": "arthritis",
+      "url": "https://medlineplus.gov/arthritis.html",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/arthritis.html"
+    },
+    {
+      "condition_id": "bppv",
+      "url": "https://medlineplus.gov/ency/article/001420.htm",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/ency/article/001420.htm"
+    },
+    {
+      "condition_id": "acne",
+      "url": "https://medlineplus.gov/acne.html",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/acne.html"
+    },
+    {
+      "condition_id": "urinary_tract_infection",
+      "url": "https://medlineplus.gov/urinarytractinfections.html",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/urinarytractinfections.html"
+    },
+    {
+      "condition_id": "psoriasis",
+      "url": "https://medlineplus.gov/psoriasis.html",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/psoriasis.html"
+    },
+    {
+      "condition_id": "impetigo",
+      "url": "https://medlineplus.gov/impetigo.html",
+      "status": 200,
+      "final_url": "https://medlineplus.gov/impetigo.html"
+    }
+  ]
+}

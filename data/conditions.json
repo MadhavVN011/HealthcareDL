@@ -1,0 +1,344 @@
+[
+  {
+    "id": "fungal_infection",
+    "label": "Fungal infection",
+    "aliases": [],
+    "description": "Fungal infections are caused by fungi and may affect the skin or other parts of the body.",
+    "source": "https://medlineplus.gov/fungalinfections.html",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "allergy",
+    "label": "Allergy",
+    "aliases": [],
+    "description": "An allergy is an immune response to a substance that is usually harmless.",
+    "source": "https://medlineplus.gov/allergy.html",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "gerd",
+    "label": "GERD",
+    "aliases": [],
+    "description": "Gastroesophageal reflux disease involves repeated movement of stomach contents into the esophagus.",
+    "source": "https://medlineplus.gov/gerd.html",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "chronic_cholestasis",
+    "label": "Chronic cholestasis",
+    "aliases": [],
+    "description": "Cholestasis is reduced or blocked flow of bile from the liver.",
+    "source": "https://medlineplus.gov/ency/article/000215.htm",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "drug_reaction",
+    "label": "Drug reaction",
+    "aliases": [],
+    "description": "Medicines can cause unwanted effects, including allergic reactions and other adverse reactions.",
+    "source": "https://medlineplus.gov/drugreactions.html",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "peptic_ulcer",
+    "label": "Peptic ulcer disease",
+    "aliases": [
+      "Peptic ulcer diseae"
+    ],
+    "description": "Peptic ulcers are sores in the lining of the stomach or duodenum.",
+    "source": "https://medlineplus.gov/pepticulcer.html",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "aids",
+    "label": "AIDS",
+    "aliases": [],
+    "description": "AIDS is the most advanced stage of HIV infection. HIV testing and clinical assessment are needed to establish the diagnosis.",
+    "source": "https://medlineplus.gov/hiv.html",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "diabetes",
+    "label": "Diabetes",
+    "aliases": [],
+    "description": "Diabetes is a condition in which blood glucose is too high.",
+    "source": "https://medlineplus.gov/diabetes.html",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "gastroenteritis",
+    "label": "Gastroenteritis",
+    "aliases": [],
+    "description": "Gastroenteritis is inflammation of the lining of the stomach and intestines.",
+    "source": "https://medlineplus.gov/gastroenteritis.html",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "asthma",
+    "label": "Bronchial asthma",
+    "aliases": [],
+    "description": "Asthma is a chronic condition in which the airways become inflamed and narrow.",
+    "source": "https://medlineplus.gov/asthma.html",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "hypertension",
+    "label": "Hypertension",
+    "aliases": [],
+    "description": "Hypertension means persistently high blood pressure and requires blood pressure measurement.",
+    "source": "https://medlineplus.gov/highbloodpressure.html",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "migraine",
+    "label": "Migraine",
+    "aliases": [],
+    "description": "Migraine can cause recurring headaches and other symptoms such as nausea or sensitivity to light.",
+    "source": "https://medlineplus.gov/migraine.html",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "cervical_spondylosis",
+    "label": "Cervical spondylosis",
+    "aliases": [],
+    "description": "Cervical spondylosis involves age-related changes in the joints and disks of the neck.",
+    "source": "https://medlineplus.gov/ency/article/000436.htm",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "brain_hemorrhage",
+    "label": "Brain hemorrhage",
+    "aliases": [
+      "Paralysis (brain hemorrhage)"
+    ],
+    "description": "Bleeding in or around the brain is a medical emergency. Symptoms alone cannot distinguish bleeding from other types of stroke.",
+    "source": "https://medlineplus.gov/ency/article/000726.htm",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "jaundice",
+    "label": "Jaundice",
+    "aliases": [],
+    "description": "Jaundice is yellowing of the skin or eyes due to a buildup of bilirubin and can have several causes.",
+    "source": "https://medlineplus.gov/jaundice.html",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "malaria",
+    "label": "Malaria",
+    "aliases": [],
+    "description": "Malaria is a parasitic infection usually transmitted by infected mosquitoes.",
+    "source": "https://medlineplus.gov/malaria.html",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "chickenpox",
+    "label": "Chickenpox",
+    "aliases": [
+      "Chicken pox"
+    ],
+    "description": "Chickenpox is an infection caused by varicella-zoster virus that commonly causes an itchy rash.",
+    "source": "https://medlineplus.gov/chickenpox.html",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "dengue",
+    "label": "Dengue",
+    "aliases": [],
+    "description": "Dengue is a viral infection spread by infected mosquitoes.",
+    "source": "https://medlineplus.gov/dengue.html",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "typhoid",
+    "label": "Typhoid",
+    "aliases": [],
+    "description": "Typhoid fever is an infection caused by Salmonella Typhi bacteria.",
+    "source": "https://medlineplus.gov/ency/article/001332.htm",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "hepatitis_a",
+    "label": "Hepatitis A",
+    "aliases": [],
+    "description": "Hepatitis A is a liver infection caused by the hepatitis A virus.",
+    "source": "https://medlineplus.gov/hepatitisa.html",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "hepatitis_b",
+    "label": "Hepatitis B",
+    "aliases": [],
+    "description": "Hepatitis B is a liver infection caused by the hepatitis B virus.",
+    "source": "https://medlineplus.gov/hepatitisb.html",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "hepatitis_c",
+    "label": "Hepatitis C",
+    "aliases": [],
+    "description": "Hepatitis C is a liver infection caused by the hepatitis C virus.",
+    "source": "https://medlineplus.gov/hepatitisc.html",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "hepatitis_d",
+    "label": "Hepatitis D",
+    "aliases": [],
+    "description": "Hepatitis D is a viral liver infection that occurs only in people with hepatitis B.",
+    "source": "https://medlineplus.gov/ency/article/000216.htm",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "hepatitis_e",
+    "label": "Hepatitis E",
+    "aliases": [],
+    "description": "Hepatitis E is a liver infection caused by the hepatitis E virus.",
+    "source": "https://medlineplus.gov/hepatitis.html",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "alcoholic_hepatitis",
+    "label": "Alcohol-associated hepatitis",
+    "aliases": [
+      "Alcoholic hepatitis"
+    ],
+    "description": "Alcohol-associated hepatitis is inflammation of the liver related to alcohol use.",
+    "source": "https://medlineplus.gov/ency/article/000281.htm",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "tuberculosis",
+    "label": "Tuberculosis",
+    "aliases": [],
+    "description": "Tuberculosis is a bacterial infection that most commonly affects the lungs.",
+    "source": "https://medlineplus.gov/tuberculosis.html",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "common_cold",
+    "label": "Common cold",
+    "aliases": [],
+    "description": "The common cold is a viral infection of the upper respiratory tract.",
+    "source": "https://medlineplus.gov/commoncold.html",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "pneumonia",
+    "label": "Pneumonia",
+    "aliases": [],
+    "description": "Pneumonia is an infection affecting one or both lungs.",
+    "source": "https://medlineplus.gov/pneumonia.html",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "hemorrhoids",
+    "label": "Hemorrhoids",
+    "aliases": [
+      "Dimorphic hemmorhoids(piles)"
+    ],
+    "description": "Hemorrhoids are swollen veins in or around the anus and lower rectum.",
+    "source": "https://medlineplus.gov/hemorrhoids.html",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "heart_attack",
+    "label": "Heart attack",
+    "aliases": [],
+    "description": "A heart attack occurs when blood flow to part of the heart is blocked. It requires emergency care.",
+    "source": "https://medlineplus.gov/heartattack.html",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "varicose_veins",
+    "label": "Varicose veins",
+    "aliases": [],
+    "description": "Varicose veins are enlarged, twisted veins, often in the legs.",
+    "source": "https://medlineplus.gov/varicoseveins.html",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "hypothyroidism",
+    "label": "Hypothyroidism",
+    "aliases": [],
+    "description": "Hypothyroidism means the thyroid gland does not make enough thyroid hormone.",
+    "source": "https://medlineplus.gov/hypothyroidism.html",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "hyperthyroidism",
+    "label": "Hyperthyroidism",
+    "aliases": [],
+    "description": "Hyperthyroidism means the thyroid gland makes too much thyroid hormone.",
+    "source": "https://medlineplus.gov/hyperthyroidism.html",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "hypoglycemia",
+    "label": "Hypoglycemia",
+    "aliases": [],
+    "description": "Hypoglycemia means blood glucose is lower than normal.",
+    "source": "https://medlineplus.gov/hypoglycemia.html",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "osteoarthritis",
+    "label": "Osteoarthritis",
+    "aliases": [
+      "Osteoarthristis"
+    ],
+    "description": "Osteoarthritis is a joint disease involving breakdown of cartilage and changes in other joint tissues.",
+    "source": "https://medlineplus.gov/osteoarthritis.html",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "arthritis",
+    "label": "Arthritis",
+    "aliases": [],
+    "description": "Arthritis refers to a group of conditions that affect the joints.",
+    "source": "https://medlineplus.gov/arthritis.html",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "bppv",
+    "label": "Benign paroxysmal positional vertigo",
+    "aliases": [
+      "(vertigo) Paroymsal Positional Vertigo"
+    ],
+    "description": "Benign paroxysmal positional vertigo causes brief episodes of dizziness with certain head movements.",
+    "source": "https://medlineplus.gov/ency/article/001420.htm",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "acne",
+    "label": "Acne",
+    "aliases": [],
+    "description": "Acne develops when hair follicles become clogged with oil and dead skin cells.",
+    "source": "https://medlineplus.gov/acne.html",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "urinary_tract_infection",
+    "label": "Urinary tract infection",
+    "aliases": [],
+    "description": "A urinary tract infection can affect the bladder, kidneys, or other parts of the urinary tract.",
+    "source": "https://medlineplus.gov/urinarytractinfections.html",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "psoriasis",
+    "label": "Psoriasis",
+    "aliases": [],
+    "description": "Psoriasis is a chronic disease that can cause patches of thick, scaly skin.",
+    "source": "https://medlineplus.gov/psoriasis.html",
+    "reference_checked": "2026-11-11"
+  },
+  {
+    "id": "impetigo",
+    "label": "Impetigo",
+    "aliases": [],
+    "description": "Impetigo is a contagious bacterial skin infection.",
+    "source": "https://medlineplus.gov/impetigo.html",
+    "reference_checked": "2026-11-11"
+  }
+]

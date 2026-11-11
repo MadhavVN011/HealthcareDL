@@ -1,0 +1,12 @@
+.git
+.venv
+__pycache__
+.pytest_cache
+tests
+*.ipynb
+Training.csv
+data/legacy
+data/external
+docs
+.env*
+.vercel
