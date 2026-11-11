@@ -1,0 +1,19 @@
+HealthcareDL chest CT research artifacts
+
+Dataset and two reencoded validation images:
+SARS-CoV-2 CT-scan dataset: A large dataset of real patients CT scans for SARS-CoV-2 identification (2020).
+Eduardo Soares, Plamen Angelov, Sarah Biaso, Michele Higa Froes, Daniel Kanda Abe.
+https://doi.org/10.1101/2020.04.24.20078584
+https://www.kaggle.com/datasets/plameneduardo/sarscov2-ctscan-dataset
+Publisher-declared dataset license: CC BY-NC-SA 4.0
+https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+Changes: exact duplicate images removed before splitting; images resized and normalized for CNN input; two validation images reencoded as PNG. A classification head was trained for this project. No medical claim or endorsement by the dataset authors is implied. Keep source attribution and the source dataset's non-commercial/share-alike terms with dataset-derived artifacts and examples.
+
+Backbone: ImageNet-pretrained MobileNetV3 Small from Torchvision, using a frozen encoder.
+Torchvision source software license: BSD-3-Clause, reproduced in TORCHVISION-LICENSE.txt. Pretrained weights and source data retain their upstream terms.
+https://docs.pytorch.org/vision/stable/models/generated/torchvision.models.mobilenet_v3_small.html
+
+Execution: ONNX Runtime Web, MIT license and third-party notices in ../../vendor/onnx/.
+
+This is a two-pattern, image-level research model, not a diagnostic service, complete radiology interpretation, or clinically validated medical device. Comparator does not mean healthy or COVID-negative. See report.json and the repository model documentation for the measured evaluation and its limitations.

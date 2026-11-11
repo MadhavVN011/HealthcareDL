@@ -4,7 +4,7 @@
 
 Production URL: <https://healthcaredl-resume.vercel.app>
 
-Published on November 11, 2026. Verified without authentication: the explorer, health endpoint, model/data/privacy pages, static assets, JSON prediction, browser form submission, and mobile layout. The current production deployment is `dpl_3KcTQ8zzq8K39wBZqHNZFFULnkYv` under the `healthcaredl-resume` Vercel project.
+Published on November 11, 2026. Verified without authentication: the explorer, health endpoint, model/data/privacy pages, static assets, JSON prediction, browser form submission, and mobile layout. The demo is hosted under the `healthcaredl-resume` Vercel project. The theme update was verified as deployment `dpl_3KcTQ8zzq8K39wBZqHNZFFULnkYv`; subsequent deployment history is available in the project dashboard.
 
 Training was rerun from scratch with seed 20, a 400-epoch maximum, and patience 40. It completed 152 epochs and selected epoch 112, reproducing the previous weights and learning history exactly. Held-out accuracy and macro F1 remained 1.000 on the same 61 test patterns. All 79 automated checks passed before redeployment; the public health endpoint, model page, and neural prediction were verified afterward.
 
@@ -13,6 +13,8 @@ The subsequent explorer update adds four one-click fictional examples, a count-s
 After publishing, unauthenticated checks confirmed the health endpoint and JSON match/insufficient/urgent states. All four example buttons returned their expected matches in a mobile browser on the public production alias, with the percentages visible and no horizontal overflow or JavaScript errors.
 
 The theme update adds a shared light/dark switch, device-preference detection, browser-local persistence, cross-tab synchronization, and themed controls, charts, and result states. All 96 automated checks passed. Accessibility audits of 24 states across both themes found no WCAG A/AA violations or horizontal overflow. Theme initialization uses an external script compatible with the existing content security policy and applies the preference before the stylesheet loads. The privacy page documents the single stored theme preference.
+
+The report workspace adds local PDF/image blood-report extraction and a separate browser-based chest CT research classifier. All 142 automated checks passed before the source update, including real image/scanned-PDF OCR and browser/PyTorch numerical agreement. The imaging training stack and raw CT archive are excluded from the web function. The server still requires only Flask and NumPy; WebAssembly, model, and language assets are served from `public/static/`. Selected medical files are not uploaded. The new workflow is reviewed on `development` before merging into `main` for production.
 
 Vercel installs the runtime dependencies declared in `pyproject.toml`; these must stay aligned with `requirements.txt`. The application was deployed from the local working tree through the CLI. Source updates are pushed to `development` and reviewed through a pull request into `main`; merging to `main` lets the connected Vercel project deploy the reviewed source.
 

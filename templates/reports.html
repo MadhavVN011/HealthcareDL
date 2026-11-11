@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block title %}Report Analysis · HealthcareDL{% endblock %}
+{% block breadcrumb %}Report analysis{% endblock %}
+{% block page_scripts %}
+<script src="{{ url_for('static', filename='vendor/tesseract/tesseract.min.js') }}" defer></script>
+<script src="{{ url_for('static', filename='vendor/onnx/ort.wasm.min.js') }}" defer></script>
+<script type="module" src="{{ url_for('static', filename='medical-reports.mjs') }}"></script>
+{% endblock %}
+{% block content %}
+<div class="page-heading"><div><p class="eyebrow"><span class="tiny-line"></span>DOCUMENT & IMAGE WORKSPACE</p><h1>Explore your reports<span class="accent">.</span></h1><p class="page-description">Read blood-test values and explore a chest CT research model, with clear sources and limits.</p></div><span class="research-badge">{{ icon('lock',14) }} Processed on your device</span></div>
+<div class="scope-note">{{ icon('info',18) }}<p><strong>Educational analysis.</strong> Neither pipeline diagnoses illness or recommends treatment. Files, extracted text, and images stay in this tab and are not uploaded or saved by the app.</p></div>
+<noscript><p class="error">Report analysis requires JavaScript because processing runs in your browser. The symptom explorer still supports manual entry.</p></noscript>
+<div class="document-grid">
+  <section class="card document-card" aria-labelledby="blood-title">
+    <div class="card-heading"><div class="section-number">01</div><div><h2 id="blood-title">Blood report</h2><p>Extract readings. Compare printed ranges.</p></div>{{ icon('file',21) }}</div>
+    <p class="document-intro">Choose an English-language PDF, PNG, JPEG, or text report. Text extraction and OCR read supported tests; arithmetic compares values only with the reference ranges printed on your report.</p>
+    <form id="blood-form">
+      <fieldset id="blood-controls" disabled>
+        <legend class="visually-hidden">Blood-report source and analysis</legend>
+        <label class="document-file-label" for="blood-file">{{ icon('upload',22) }}<strong>Choose a blood report</strong><span>Up to 10 MB · PDFs up to 5 pages</span></label>
+        <input id="blood-file" type="file" accept=".pdf,.png,.jpg,.jpeg,.txt,application/pdf,image/png,image/jpeg,text/plain" aria-describedby="blood-help">
+        <p class="field-hint" id="blood-help">OCR can misread numbers, units, or rows. Verify every extracted reading against the source. Missing or ambiguous data is marked for review.</p>
+        <div class="document-actions"><button class="primary-button" type="submit" id="blood-analyze">Analyze blood report {{ icon('arrow',16) }}</button><button type="button" class="secondary" id="blood-example">Try fictional example</button></div>
+        <p class="field-hint"><a href="{{ url_for('static', filename='examples/blood-report.pdf') }}" download>Download the fictional PDF</a> or <a href="{{ url_for('static', filename='examples/blood-report.png') }}" download>its image version</a> to test file extraction.</p>
+        <details class="manual-entry"><summary>Paste report text instead</summary><label for="blood-text">Report text</label><textarea id="blood-text" maxlength="200000" rows="5" placeholder="Hemoglobin 10.8 g/dL 12.0 - 15.5"></textarea><p class="field-hint">One test per line, with result, unit, and the report's reference range. Pasted text takes precedence over a selected file.</p></details>
+      </fieldset>
+    </form>
+    <p class="document-progress field-hint" id="blood-status" role="status" aria-live="polite">Choose a report or run the fictional example. Processing may take longer on mobile devices.</p>
+    <div class="document-error error" id="blood-error" role="alert" hidden></div>
+    <div id="blood-results" class="document-results" hidden>
+      <div class="document-result-heading"><h3>Extracted readings</h3><span class="result-badge neutral-badge" id="blood-method"></span></div>
+      <p class="field-hint" id="blood-summary"></p>
+      <div class="document-table-scroll" tabindex="0" role="region" aria-label="Extracted blood-test readings"><table class="data-table lab-table"><thead><tr><th>Test / reading</th><th>Printed range</th><th>Comparison</th></tr></thead><tbody id="blood-rows"></tbody></table></div>
+      <div class="interpretation"><strong>What this comparison means</strong><p>A reading outside a reference range is not a diagnosis, and one within it does not establish good health. This workflow uses the report's ranges rather than assuming universal ranges. It cannot determine which age- or sex-specific range applies.</p></div>
+      <a class="text-link" href="https://medlineplus.gov/lab-tests/how-to-understand-your-lab-results/" target="_blank" rel="noopener noreferrer">Understanding lab results · MedlinePlus {{ icon('external',13) }}</a>
+      <details class="manual-entry"><summary>Review the extracted source text</summary><pre id="blood-source" class="document-source" tabindex="0" role="region" aria-label="Extracted source text"></pre></details>
+    </div>
+    <button class="quiet-button document-clear" type="button" id="blood-clear" hidden>Clear report and results</button>
+    <div class="privacy-inline">{{ icon('lock',14) }}<span>OCR and comparison run locally. No report data is sent to an AI service.</span></div>
+  </section>
+  <section class="card document-card" aria-labelledby="ct-title">
+    <div class="card-heading"><div class="section-number">02</div><div><h2 id="ct-title">Chest CT research classifier</h2><p>A separate convolutional neural network.</p></div>{{ icon('chart',21) }}</div>
+    <p class="document-intro">Classify a single rendered axial chest CT slice into <strong>COVID-associated</strong> or <strong>comparator</strong> dataset patterns. Comparator does not mean healthy or negative for COVID. This model does not generate a radiology report.</p>
+    {% if not ct_report %}<p class="error">The CT model report is unavailable. Blood-report analysis remains available.</p>{% endif %}
+    <form id="ct-form">
+      <fieldset id="ct-controls" disabled {% if not ct_report %}data-unavailable="true"{% endif %}>
+        <legend class="visually-hidden">Chest CT source and research classification</legend>
+        <label class="document-file-label" for="ct-file">{{ icon('upload',22) }}<strong>Choose a chest CT slice</strong><span>PNG or JPEG · Up to 10 MB</span></label>
+        <input id="ct-file" type="file" accept=".png,.jpg,.jpeg,image/png,image/jpeg" aria-describedby="ct-help">
+        <p class="field-hint" id="ct-help">Rendered chest CT slices only. DICOM studies, X-rays, photos, and other body regions are not supported. Export a PNG/JPEG slice from your imaging viewer.</p>
+        <label class="document-confirmation" for="ct-confirm"><input id="ct-confirm" type="checkbox" required><span>I confirm this is an axial chest CT slice and understand this is a research classification, not a medical interpretation.</span></label>
+        <div class="document-actions"><button class="primary-button" type="submit" id="ct-analyze">Analyze CT slice {{ icon('arrow',16) }}</button></div>
+        <div class="ct-examples"><span class="quick-label">PUBLISHED DATASET EXAMPLES</span><div class="quick-symptoms"><button type="button" class="secondary" data-ct-example="0">Comparator sample</button><button type="button" class="secondary" data-ct-example="1">COVID-associated sample</button></div><p class="field-hint">Validation-set images for a walkthrough, not new independent cases. Example labels are not supplied to the model.</p></div>
+      </fieldset>
+    </form>
+    <p class="document-progress field-hint" id="ct-status" role="status" aria-live="polite">The model runs locally using your browser's CPU. Its first run downloads the model and WebAssembly runtime from this site.</p>
+    <div class="document-error error" id="ct-error" role="alert" hidden></div>
+    <div id="ct-results" class="document-results" hidden>
+      <img id="ct-preview" class="ct-preview" alt="Selected chest CT slice" hidden>
+      <span class="result-badge" id="ct-result-badge">Research model output</span><h3 class="condition-title" id="ct-result-label"></h3>
+      <p class="field-hint" id="ct-result-description"></p>
+      <dl class="result-metrics"><div><dt>Model score</dt><dd><strong id="ct-result-score"></strong><p>Uncalibrated softmax score, not a chance of illness.</p></dd></div><div><dt>Held-out image accuracy</dt><dd><strong id="ct-result-accuracy"></strong><p id="ct-result-support"></p></dd></div></dl>
+      <p class="metric-context">The CT model's metrics are separate from the symptom model's metrics. Related patient slices may cross partitions, so this image-level score can overstate performance on new patients.</p>
+    </div>
+    {% if ct_report %}<details class="manual-entry ct-model-details"><summary>Model, dataset, and limitations</summary><div class="model-facts"><div><span>Architecture</span><strong>MobileNetV3 + 64-unit head</strong></div><div><span>Training / validation / test images</span><strong>{{ ct_report.split_sizes.train }} / {{ ct_report.split_sizes.validation }} / {{ ct_report.split_sizes.test }}</strong></div><div><span>Held-out image accuracy</span><strong>{{ '%.1f'|format(ct_report.test.accuracy*100) }}%</strong></div><div><span>Independent patient evaluation</span><strong>Not established</strong></div></div><ul class="document-limitations">{% for limitation in ct_report.limitations %}<li>{{ limitation }}</li>{% endfor %}</ul><a class="text-link" href="{{ ct_report.dataset.source }}" target="_blank" rel="noopener noreferrer">SARS-CoV-2 CT dataset · CC BY-NC-SA 4.0 {{ icon('external',13) }}</a></details>{% endif %}
+    <button class="quiet-button document-clear" type="button" id="ct-clear" hidden>Clear image and results</button>
+    <p class="field-hint"><a href="{{ url_for('static', filename='models/chest-ct/NOTICE.txt') }}" target="_blank" rel="noopener noreferrer">Model attribution and licenses {{ icon('external',12) }}</a></p>
+    <div class="privacy-inline">{{ icon('lock',14) }}<span>Your image is processed locally and is not uploaded.</span></div>
+  </section>
+</div>
+<div class="urgent-note">{{ icon('alert',17) }}<p>Do not use either result to delay medical care or to start, stop, or change treatment.</p></div>
+{% endblock %}

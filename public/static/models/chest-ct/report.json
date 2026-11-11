@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "architecture": "mobilenet_v3_small_frozen_mlp64",
+  "seed": 20,
+  "classes": [
+    "comparator",
+    "covid_associated"
+  ],
+  "input_shape": [
+    1,
+    3,
+    224,
+    224
+  ],
+  "device": "cpu",
+  "preprocessing": "half_pixel_bilinear_rgb_imagenet_normalization",
+  "versions": {
+    "torch": "2.15.0+cpu",
+    "numpy": "2.5.4",
+    "torchvision": "0.29.2+cpu"
+  },
+  "dataset": {
+    "source": "https://www.kaggle.com/datasets/plameneduardo/sarscov2-ctscan-dataset",
+    "license": "CC BY-NC-SA 4.0",
+    "archive_sha256": "1df9c4555fbae535fb2ca97132a94eefa88e7092f24a94d5f254ab97c0846c2a",
+    "unique_images": 2479,
+    "split_unit": "image",
+    "patient_disjoint": false
+  },
+  "split_sizes": {
+    "train": 1487,
+    "validation": 496,
+    "test": 496
+  },
+  "best_epoch": 18,
+  "epochs_run": 43,
+  "validation": {
+    "accuracy": 0.967741935483871,
+    "balanced_accuracy": 0.9677723577235773,
+    "macro_f1": 0.967741410988082,
+    "roc_auc": 0.9973658536585366,
+    "confusion_matrix": [
+      [
+        239,
+        7
+      ],
+      [
+        9,
+        241
+      ]
+    ],
+    "count": 496,
+    "match_coverage_at_0_7": 0.9838709677419355,
+    "accuracy_among_matches": 0.9754098360655737
+  },
+  "test": {
+    "accuracy": 0.967741935483871,
+    "balanced_accuracy": 0.9676747967479675,
+    "macro_f1": 0.9677335415040333,
+    "roc_auc": 0.9955609756097561,
+    "confusion_matrix": [
+      [
+        236,
+        10
+      ],
+      [
+        6,
+        244
+      ]
+    ],
+    "count": 496,
+    "match_coverage_at_0_7": 0.9657258064516129,
+    "accuracy_among_matches": 0.9832985386221295
+  },
+  "min_score": 0.7,
+  "limitations": [
+    "Research classifier for rendered axial chest CT slices; not a diagnosis or a complete CT interpretation.",
+    "Comparator does not mean healthy, negative for COVID, or free of other disease.",
+    "Patient identifiers are unavailable; related slices from the same patient may cross image partitions. Scores may be optimistic.",
+    "Softmax outputs and abstention thresholds are uncalibrated. No clinical or external patient evaluation has been performed.",
+    "Not trained for X-rays, photos, head CT, DICOM studies, tumors, emboli, or general lung findings."
+  ],
+  "onnx_max_abs_error": 9.5367431640625e-06,
+  "model_sha256": "47bd5ad6c3752419591297dc55ab4c4cfd7ce1acb05978622edfeac735e5c263",
+  "examples": [
+    {
+      "file": "example-0.png",
+      "class_id": "comparator",
+      "split": "validation",
+      "logits": [
+        4.3120198249816895,
+        -4.184333324432373
+      ]
+    },
+    {
+      "file": "example-1.png",
+      "class_id": "covid_associated",
+      "split": "validation",
+      "logits": [
+        -11.489572525024414,
+        9.912670135498047
+      ]
+    }
+  ],
+  "encoder": {
+    "source": "https://download.pytorch.org/models/mobilenet_v3_small-047dcff4.pth",
+    "sha256": "047dcff4addef86ea5bc2eff13c9614dc11f47ab1160d0a71a25e7db994f4e1f",
+    "weights": "IMAGENET1K_V1",
+    "frozen": true
+  }
+}

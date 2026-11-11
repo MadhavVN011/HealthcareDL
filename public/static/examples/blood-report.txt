@@ -1,0 +1,9 @@
+Fictional blood report - demonstration only
+Test                 Result   Unit       Reference range
+Hemoglobin           10.8     g/dL       12.0 - 15.5
+WBC                  6.1      x10^9/L    4.0 - 11.0
+Platelets            275      x10^9/L    150 - 450
+Glucose              112      mg/dL      70 - 99
+Creatinine           0.9      mg/dL      0.6 - 1.2
+TSH                  2.1      mIU/L
+No real patient information. Verify all extracted readings.

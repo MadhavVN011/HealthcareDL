@@ -10,3 +10,6 @@ data/external
 docs
 .env*
 .vercel
+artifacts/chest_ct
+healthdl/chest_training.py
+requirements-imaging-training.txt

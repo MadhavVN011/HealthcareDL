@@ -1,38 +1,7 @@
 """Real browser checks; use installed Chrome or `playwright install chromium`."""
-import shutil
-import threading
-
 import pytest
-from werkzeug.serving import make_server
 
 playwright = pytest.importorskip("playwright.sync_api")
-
-
-@pytest.fixture
-def live_url(app):
-    server = make_server("127.0.0.1", 0, app, threaded=True)
-    thread = threading.Thread(target=server.serve_forever, daemon=True)
-    thread.start()
-    yield f"http://127.0.0.1:{server.server_port}"
-    server.shutdown()
-    thread.join(timeout=5)
-
-
-@pytest.fixture
-def browser_page():
-    with playwright.sync_playwright() as driver:
-        executable = shutil.which("google-chrome") or shutil.which("chromium")
-        try:
-            browser = driver.chromium.launch(executable_path=executable, headless=True, args=["--no-sandbox"])
-        except playwright.Error as error:
-            if "Executable doesn't exist" in str(error):
-                pytest.skip("Install Chromium with: python -m playwright install chromium")
-            raise
-        context = browser.new_context()
-        page = context.new_page()
-        yield page
-        context.close()
-        browser.close()
 
 
 def test_selection_submission_clear_and_mobile_layout(live_url, browser_page):

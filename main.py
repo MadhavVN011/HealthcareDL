@@ -73,11 +73,24 @@ def create_app(config=None):
         response.headers["X-Frame-Options"] = "DENY"
         if application.config["ENABLE_HSTS"]:
             response.headers["Strict-Transport-Security"] = "max-age=31536000"
+        # Only the document workspace needs WebAssembly and local file previews.
+        # Files and extracted medical content are never submitted to this server.
+        medical = request.endpoint == "medical_reports" or request.path.startswith("/static/vendor/")
+        scripts = "'self' 'wasm-unsafe-eval'" if medical else "'self'"
+        images = "'self' blob: data:" if medical else "'self'"
         response.headers["Content-Security-Policy"] = (
-            "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; "
-            "object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+            f"default-src 'self'; script-src {scripts}; style-src 'self'; img-src {images}; "
+            "worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
         )
         return response
+
+    @application.get("/reports")
+    def medical_reports():
+        try:
+            ct_report = json.loads((ROOT / "public/static/models/chest-ct/report.json").read_text())
+        except (OSError, ValueError):
+            ct_report = None
+        return render_template("reports.html", ct_report=ct_report)
 
     @application.get("/")
     @application.get("/predict")

@@ -4,6 +4,8 @@
 
 An educational PyTorch project that classifies symptom patterns into 41 dataset categories and serves the trained neural network through Flask. The model is a multilayer perceptron: **131 inputs → 128 → 64 → 41 logits**, with ReLU and dropout between hidden layers.
 
+The report workspace adds **local blood-report OCR and reference-range comparison**, plus a separately trained **MobileNetV3 chest CT research classifier**. These pipelines have their own scope and evaluation; they do not extend the symptom model's accuracy claims.
+
 ![HealthcareDL research workspace](docs/screenshots/explorer.png)
 
 [View the dark theme](docs/screenshots/explorer-dark.png)
@@ -87,6 +89,26 @@ Invalid requests return HTTP 400, oversized requests 413, and unavailable models
 
 Voice input is optional and fills the same submitted field. Unsupported browsers fall back to typing. A browser speech service may process audio externally; the interface explains this before activation. The Flask app does not persist symptom submissions, print them, or learn from them. Infrastructure operators must assess their own logging and retention.
 
+## Blood reports and chest CT
+
+Open **Report analysis** in the navigation, or visit `/reports`.
+
+- **Blood reports:** choose an English-language PDF, PNG, JPEG, or text file. PDF text extraction and Tesseract LSTM OCR read supported test rows, then arithmetic compares the result with the range printed on that report. Missing, conflicting, or ambiguous values are flagged for review. This is not a blood-disease prediction model; no universal ranges or diagnoses are invented. A fictional example and downloadable sample files are included.
+- **Chest CT:** choose a single rendered axial chest CT slice in PNG/JPEG format. A separate CNN classifies COVID-associated versus comparator dataset patterns. Comparator does not mean healthy or COVID-negative. DICOM studies, X-rays, other body regions, and general radiology interpretation are not supported. Two published validation examples are available.
+
+Files are processed in the current browser tab and are not uploaded or saved by the application. There are no paid inference API calls. The first CT run downloads about 19 MB of local model/runtime assets; mobile devices can take longer. Files are limited to 10 MB and PDFs to five pages. Report processing requires JavaScript and a browser with WebAssembly support.
+
+The CT model achieved **96.77% accuracy on 496 held-out images** after training on 1,487 images and selecting its checkpoint using 496 validation images. This is **not a patient-separated evaluation**: patient identifiers are unavailable in the downloaded archive, and related slices may cross partitions. No clinical accuracy is established. The CT percentages are separate from the symptom model's metrics.
+
+See [report analysis and reproducible training](docs/REPORT_ANALYSIS.md), [dependency/data attribution](docs/THIRD_PARTY.md), and [the workspace preview](docs/screenshots/reports.png).
+
+```bash
+python tools/check_medical_assets.py
+# Optional CT retraining, after downloading the public archive:
+python -m pip install -r requirements-imaging-training.txt
+python tools/train_chest_ct.py
+```
+
 ## Notebook and checks
 
 [Symptom Analysis Deep Learning.ipynb](Symptom%20Analysis%20Deep%20Learning.ipynb) runs the same preprocessing, training, evaluation, and inference code. Select the project environment as its Python kernel. Its plots require the development dependencies.
@@ -104,6 +126,8 @@ python -m pytest -q tests/test_browser.py
 ```
 
 Checks cover duplicate leakage, feature merging, label alignment, deterministic training, reloadable neural weights, artifact corruption, abstention, emergency precedence, malformed requests, paths, UI submission, voice input, mobile layout, and theme preferences across submissions, navigation, reloads, and tabs.
+
+Report checks include actual text and scanned PDFs, image OCR, units and range boundaries, ambiguous/duplicate rows, file validation, CT bundle corruption, browser/PyTorch numerical agreement, and requests confirming that medical files are not uploaded. Standalone JavaScript parser checks use Node when it is installed; report browser checks use the same Chrome/Playwright setup.
 
 ## Data and project structure
 

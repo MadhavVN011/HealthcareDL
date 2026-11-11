@@ -1,0 +1,5 @@
+-r requirements-training.txt
+torchvision==0.29.2+cpu
+Pillow==13.0.0
+onnx==1.23.2
+onnxruntime==1.31.1
