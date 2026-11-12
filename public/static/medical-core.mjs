@@ -299,3 +299,11 @@ export function ctScores(logits) {
 
 export const DEMO_LAB_TEXT =
   "Fictional blood report — demonstration only\nTest Result Unit Reference range\nHemoglobin 10.8 g/dL 12.0 - 15.5\nWBC 6.1 x10^9/L 4.0 - 11.0\nPlatelets 275 x10^9/L 150 - 450\nGlucose 112 mg/dL 70 - 99\nCreatinine 0.9 mg/dL 0.6 - 1.2\nTSH 2.1 mIU/L";
+
+export const LAB_DEMO_EXAMPLES = Object.freeze({
+  mixed: DEMO_LAB_TEXT,
+  within:
+    "Fictional blood report — demonstration only\nTest Result Unit Reference range\nHemoglobin 13.5 g/dL 12.0 - 15.5\nWBC 6.1 x10^9/L 4.0 - 11.0\nPlatelets 275 x10^9/L 150 - 450\nGlucose 90 mg/dL 70 - 99\nCreatinine 0.9 mg/dL 0.6 - 1.2",
+  review:
+    "Fictional blood report — demonstration only\nTest Result Unit Reference range\nHemoglobin 110 g/L 12 - 16 g/dL\nGlucose 100 mg/dL\nTSH 2.1 mIU/L",
+});

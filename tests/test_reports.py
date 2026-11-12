@@ -59,7 +59,7 @@ def test_missing_ct_runtime_report_disables_only_ct_controls(app, tmp_path):
     response = app.test_client().get("/reports")
     assert response.status_code == 200
     assert b'data-unavailable="true"' in response.data
-    assert b'Try fictional example' in response.data
+    assert b'Try a blood report example' in response.data
 
 
 def test_vendored_medical_assets_have_pinned_checksums_and_licenses():
@@ -136,9 +136,10 @@ def test_actual_report_files_are_processed_locally(live_url, browser_page, exten
     page.on("request", lambda request: external.append(request.url) if urlparse(request.url).scheme in {"http", "https"} and not request.url.startswith(live_url) else None)
     page.on("pageerror", lambda error: errors.append(str(error)))
     page.goto(live_url + "/reports")
-    page.get_by_role("button", name="Try fictional example").click()
+    page.get_by_role("button", name="Run mixed readings blood report example").click()
     page.set_input_files("#blood-file", str(ROOT / f"public/static/examples/blood-report.{extension}"))
     assert page.input_value("#blood-text") == ""
+    expect(page.locator("#blood-example-notice")).to_be_hidden()
     page.get_by_role("button", name="Analyze blood report").click()
     expect(page.locator("#blood-results")).to_be_visible(timeout=60000)
     expect(page.locator("#blood-method")).to_have_text(method)
@@ -150,6 +151,63 @@ def test_actual_report_files_are_processed_locally(live_url, browser_page, exten
     assert page.input_value("#blood-file") == ""
     assert page.locator("#blood-rows tr").count() == 0
     assert not posts and not external and not errors
+
+
+def test_blood_demo_cards_replace_input_and_run_each_comparison(live_url, browser_page):
+    from playwright.sync_api import expect
+    page = browser_page
+    page.emulate_media(reduced_motion="reduce")
+    requests = []
+    page.on("request", lambda request: requests.append((request.method, request.url)))
+    page.goto(live_url + "/reports")
+    page.set_input_files("#blood-file", str(ROOT / "public/static/examples/blood-report.txt"))
+    for example, count, outside, review in [("mixed", 6, 2, 1), ("within", 5, 0, 0), ("review", 3, 0, 3)]:
+        button = page.locator(f'[data-blood-example="{example}"]')
+        button.click()
+        expect(page.locator("#blood-results")).to_be_visible()
+        expect(page.locator("#blood-method")).to_have_text("Fictional example")
+        expect(page.locator("#blood-example-notice")).to_contain_text(button.get_attribute("data-example-label"))
+        expect(page.locator("#blood-results-title")).to_be_focused()
+        assert page.locator("#blood-rows tr").count() == count
+        assert page.locator("#blood-rows .lab-above, #blood-rows .lab-below").count() == outside
+        assert page.locator("#blood-rows .lab-review").count() == review
+        assert page.input_value("#blood-file") == ""
+        assert page.input_value("#blood-text") == page.locator("#blood-source").text_content()
+        assert page.locator('[data-blood-example][aria-pressed="true"]').count() == 1
+    page.get_by_role("button", name="Clear report and results").click()
+    expect(page.locator("#blood-example-notice")).to_be_hidden()
+    assert page.locator('[data-blood-example][aria-pressed="true"]').count() == 0
+    assert all(method == "GET" and url.startswith(live_url) for method, url in requests)
+
+
+def test_ct_demo_cards_run_both_images_and_reset_for_a_new_upload(live_url, browser_page):
+    from playwright.sync_api import expect
+    page = browser_page
+    page.set_viewport_size({"width": 375, "height": 812})
+    page.emulate_media(color_scheme="dark", reduced_motion="reduce")
+    requests, errors = [], []
+    page.on("request", lambda request: requests.append((request.method, request.url)))
+    page.on("pageerror", lambda error: errors.append(str(error)))
+    page.goto(live_url + "/reports")
+    for index, label in [(0, "Comparator dataset pattern"), (1, "COVID-associated dataset pattern")]:
+        button = page.locator(f'[data-ct-example="{index}"]')
+        button.click()
+        expect(page.locator("#ct-result-label")).to_have_text(label, timeout=60000)
+        expect(page.locator("#ct-example-notice")).to_contain_text(button.get_attribute("data-example-label"))
+        expect(page.locator("#ct-result-label")).to_be_focused()
+        expect(button).to_have_attribute("aria-pressed", "true")
+        expect(page.locator("#ct-error")).to_be_hidden()
+        expect(page.locator("#ct-result-accuracy")).to_have_text("83.7%")
+        assert page.input_value("#ct-file") == ""
+        assert page.locator('[data-ct-example][aria-pressed="true"]').count() == 1
+        assert page.evaluate("document.documentElement.scrollWidth <= innerWidth")
+    page.set_input_files("#ct-file", str(ROOT / "public/static/models/chest-ct/example-0.png"))
+    expect(page.locator("#ct-example-notice")).to_be_hidden()
+    expect(page.locator("#ct-results")).to_be_hidden()
+    assert not page.is_checked("#ct-confirm")
+    assert page.locator('[data-ct-example][aria-pressed="true"]').count() == 0
+    assert not errors
+    assert all(method == "GET" and (url.startswith(live_url) or url.startswith("blob:")) for method, url in requests)
 
 
 def test_ct_browser_preprocessing_and_inference_match_pytorch_export(live_url, browser_page):
@@ -253,7 +311,7 @@ def test_inconsistent_ct_model_bundle_is_rejected(live_url, browser_page, proble
         report["test"]["accuracy"] = 1.2
     page.route("**/models/chest-ct/report.json", lambda route: route.fulfill(json=report))
     page.goto(live_url + "/reports")
-    page.get_by_role("button", name="Comparator sample", exact=True).click()
+    page.get_by_role("button", name="Run comparator CT scan example", exact=True).click()
     expect(page.locator("#ct-error")).to_contain_text("integrity check", timeout=30000)
     expect(page.locator("#ct-results")).to_be_hidden()
 

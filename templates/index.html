@@ -2,7 +2,7 @@
 {% block content %}
 <div class="page-heading"><div><p class="eyebrow"><span class="tiny-line"></span>SYMPTOM EXPLORER</p><h1>Explore symptom patterns<span class="accent">.</span></h1><p class="page-description">Explore how a neural network connects symptoms to examples in a learning dataset.</p></div><a class="text-link heading-link" href="{{ url_for('blog') }}">How it works {{ icon('arrow',16) }}</a></div>
 <div class="scope-note">{{ icon('info',18) }}<p><strong>For learning and research.</strong> This demo cannot diagnose illness or recommend treatment.</p><a href="{{ url_for('about') }}">Understand the limits {{ icon('external',13) }}</a></div>
-<p class="report-entry"><a class="text-link" href="{{ url_for('medical_reports') }}">{{ icon('file',16) }} Have a blood report or chest CT slice? Open report analysis {{ icon('arrow',15) }}</a></p>
+<p class="report-entry"><a class="text-link" href="{{ url_for('medical_reports') }}">{{ icon('file',16) }} Try blood report and CT / CAT scan examples, or analyze a file {{ icon('arrow',15) }}</a></p>
 <div class="workspace-grid">
   <section class="card explorer-card" aria-labelledby="form-title">
     <div class="card-heading"><div class="section-number">01</div><div><h2 id="form-title">Build your symptom list</h2><p>Select the entries you want to explore.</p></div><span class="subtle-label">INPUT</span></div>

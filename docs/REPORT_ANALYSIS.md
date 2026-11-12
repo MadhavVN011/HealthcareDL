@@ -2,6 +2,8 @@
 
 The `/reports` workspace has two separate pipelines. Neither feeds uploaded data into the symptom classifier, diagnoses a patient, or generates treatment advice. Its results do not inherit the symptom model's test accuracy.
 
+At the top of each input card, **Try an example** cards run a demonstration immediately. Blood examples cover mixed readings, readings within printed ranges, and missing/conflicting information requiring review. They use fictional report text and the same comparison rules as uploads. CT / CAT examples include previews of the two published validation images and execute the actual browser model. Results identify the example source, select the active card, and receive keyboard focus. Uploading a file or clearing the workspace removes the example selection. Examples replace current inputs and do not require a personal report or scan.
+
 ## Blood reports
 
 PDF.js 6.5.438 extracts text from PDFs. Pages without supported readable test rows are rendered and passed to Tesseract.js 7.0.0 with its English LSTM OCR model. PNG/JPEG images use the same OCR engine; UTF-8 text files and pasted text bypass OCR. All dependencies and language data are served from this site, without a third-party inference API.
