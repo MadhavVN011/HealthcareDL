@@ -34,6 +34,10 @@ async function loadSession() {
         metadata.test.accuracy > 1 ||
         !Number.isInteger(metadata.test.count) ||
         metadata.test.count < 1 ||
+        metadata.dataset?.patient_disjoint !== true ||
+        metadata.dataset?.split_unit !== "patient_folder" ||
+        !Number.isInteger(metadata.partition_summary?.test?.patient_folders) ||
+        metadata.partition_summary.test.patient_folders < 1 ||
         !Number.isFinite(metadata.min_score) ||
         metadata.min_score < 0 ||
         metadata.min_score > 1 ||

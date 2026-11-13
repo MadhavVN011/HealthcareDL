@@ -178,9 +178,9 @@
     "varicose_veins"
   ],
   "dataset_sha256": "cc00c869b702c0c90eef3c1fb4d0b54f16965f8def2dec7e1bf91d0b76480ac3",
-  "weights_sha256": "dfd1e55e2f75e400cdcdf4228e9493a661b4477b48fcb4bf4c34f5bb9435729f",
+  "weights_sha256": "cdee53bae76a37c10418c8729ce59c8757bd52e0d290b9f98dcc59a74b96756c",
   "reference_sha256": "fb5d8dc39cf6c2ba075c5e6eb8d7829b822592b5cb38ec56302a2f2dd5f0b0a7",
-  "inference_sha256": "a4ba0f7cc087fcf6d35428bed7b0fb3a7b71066ae038ec9f37246cd5db5594f9",
+  "inference_sha256": "8a0676caf104c2c565638f3c6386703fb12558b0404d9078edba663d9130c62a",
   "catalog_sha256": "44607087be8efc28e8d99b1c3e5ff38434c2c8b5b33ca0134c6275efd0115847",
   "policy": {
     "min_symptoms": 3,

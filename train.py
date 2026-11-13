@@ -14,9 +14,11 @@ def main():
     parser.add_argument("--seed", type=int, default=20)
     parser.add_argument("--epochs", type=int, default=400)
     parser.add_argument("--patience", type=int, default=40)
+    parser.add_argument("--no-augmentation", action="store_true", help="Train the original-pattern baseline without synthetic variants")
     args = parser.parse_args()
     report = train(TrainConfig(data_path=args.data, output_dir=args.output,
-                               seed=args.seed, epochs=args.epochs, patience=args.patience))
+                               seed=args.seed, epochs=args.epochs, patience=args.patience,
+                               augment_missing_symptoms=not args.no_augmentation))
     print(f"Unique patterns: {report['unique_rows']}; partitions: {report['split_sizes']}")
     print(f"Selected epoch: {report['best_epoch']}; held-out accuracy: {report['test']['accuracy']:.3f}; "
           f"macro F1: {report['test']['macro_f1']:.3f}")

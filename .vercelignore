@@ -25,5 +25,6 @@ train.py
 evaluate.py
 healthdl/evaluation.py
 healthdl/chest_training.py
+healthdl/chest_data.py
 artifacts/chest_ct/
 requirements-imaging-training.txt

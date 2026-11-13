@@ -16,80 +16,119 @@
   "preprocessing": "half_pixel_bilinear_rgb_imagenet_normalization",
   "versions": {
     "torch": "2.15.0+cpu",
-    "numpy": "2.5.4",
-    "torchvision": "0.29.2+cpu"
+    "torchvision": "0.29.2+cpu",
+    "numpy": "2.5.4"
+  },
+  "encoder": {
+    "source": "https://download.pytorch.org/models/mobilenet_v3_small-047dcff4.pth",
+    "sha256": "047dcff4addef86ea5bc2eff13c9614dc11f47ab1160d0a71a25e7db994f4e1f",
+    "weights": "IMAGENET1K_V1",
+    "frozen": true
   },
   "dataset": {
-    "source": "https://www.kaggle.com/datasets/plameneduardo/sarscov2-ctscan-dataset",
-    "license": "CC BY-NC-SA 4.0",
-    "archive_sha256": "1df9c4555fbae535fb2ca97132a94eefa88e7092f24a94d5f254ab97c0846c2a",
-    "unique_images": 2479,
-    "split_unit": "image",
-    "patient_disjoint": false
+    "source": "https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/SZDUQX",
+    "license": "CC0-1.0",
+    "archive_sha256": "4b9bd9674a058c59274bf6d8a46efb8d0cf473b0434eeb5bbe9d5423e7145d87",
+    "raw_images": 4171,
+    "unique_images": 4169,
+    "patient_folders": 210,
+    "duplicates_removed": 2,
+    "split_unit": "patient_folder",
+    "patient_disjoint": true,
+    "grouping_note": "Separation uses publisher patient folders, not independently verified identities or external hospitals."
   },
   "split_sizes": {
-    "train": 1487,
-    "validation": 496,
-    "test": 496
+    "train": 2472,
+    "validation": 864,
+    "test": 833
   },
-  "best_epoch": 18,
-  "epochs_run": 43,
+  "partition_summary": {
+    "train": {
+      "images": 2472,
+      "patient_folders": 126,
+      "categories": {
+        "Covid": 1278,
+        "Healthy": 458,
+        "Others": 736
+      }
+    },
+    "validation": {
+      "images": 864,
+      "patient_folders": 42,
+      "categories": {
+        "Covid": 471,
+        "Healthy": 145,
+        "Others": 248
+      }
+    },
+    "test": {
+      "images": 833,
+      "patient_folders": 42,
+      "categories": {
+        "Covid": 416,
+        "Healthy": 154,
+        "Others": 263
+      }
+    }
+  },
+  "best_epoch": 2,
+  "epochs_run": 27,
   "validation": {
-    "accuracy": 0.967741935483871,
-    "balanced_accuracy": 0.9677723577235773,
-    "macro_f1": 0.967741410988082,
-    "roc_auc": 0.9973658536585366,
+    "accuracy": 0.7939814814814815,
+    "balanced_accuracy": 0.7891282151018622,
+    "macro_f1": 0.7907113462669018,
+    "roc_auc": 0.8807474757297289,
     "confusion_matrix": [
       [
-        239,
-        7
+        289,
+        104
       ],
       [
-        9,
-        241
+        74,
+        397
       ]
     ],
-    "count": 496,
-    "match_coverage_at_0_7": 0.9838709677419355,
-    "accuracy_among_matches": 0.9754098360655737
+    "count": 864,
+    "match_coverage_at_0_7": 0.8182870370370371,
+    "accuracy_among_matches": 0.8528995756718529
   },
   "test": {
-    "accuracy": 0.967741935483871,
-    "balanced_accuracy": 0.9676747967479675,
-    "macro_f1": 0.9677335415040333,
-    "roc_auc": 0.9955609756097561,
+    "accuracy": 0.8367346938775511,
+    "balanced_accuracy": 0.8367459878251244,
+    "macro_f1": 0.8367231638418079,
+    "roc_auc": 0.9183614646744144,
     "confusion_matrix": [
       [
-        236,
-        10
+        345,
+        72
       ],
       [
-        6,
-        244
+        64,
+        352
       ]
     ],
-    "count": 496,
-    "match_coverage_at_0_7": 0.9657258064516129,
-    "accuracy_among_matches": 0.9832985386221295
+    "count": 833,
+    "match_coverage_at_0_7": 0.7947178871548619,
+    "accuracy_among_matches": 0.9003021148036254
   },
   "min_score": 0.7,
   "limitations": [
     "Research classifier for rendered axial chest CT slices; not a diagnosis or a complete CT interpretation.",
     "Comparator does not mean healthy, negative for COVID, or free of other disease.",
-    "Patient identifiers are unavailable; related slices from the same patient may cross image partitions. Scores may be optimistic.",
+    "Publisher patient folders are kept in separate partitions; folder identities have not been independently verified.",
     "Softmax outputs and abstention thresholds are uncalibrated. No clinical or external patient evaluation has been performed.",
     "Not trained for X-rays, photos, head CT, DICOM studies, tumors, emboli, or general lung findings."
   ],
-  "onnx_max_abs_error": 9.5367431640625e-06,
-  "model_sha256": "47bd5ad6c3752419591297dc55ab4c4cfd7ce1acb05978622edfeac735e5c263",
+  "onnx_max_abs_error": 2.1457672119140625e-06,
+  "model_sha256": "183ca21310170795b8600b0e0d40aa759035cb41a6f6d54f7ca1881eaaa8c66a",
   "examples": [
     {
       "file": "example-0.png",
       "class_id": "comparator",
       "split": "validation",
       "logits": [
-        4.3120198249816895,
-        -4.184333324432373
+        0.6875951290130615,
+        -0.5904096961021423
       ]
     },
     {
@@ -97,15 +136,9 @@
       "class_id": "covid_associated",
       "split": "validation",
       "logits": [
-        -11.489572525024414,
-        9.912670135498047
+        -1.021470069885254,
+        1.5087261199951172
       ]
     }
-  ],
-  "encoder": {
-    "source": "https://download.pytorch.org/models/mobilenet_v3_small-047dcff4.pth",
-    "sha256": "047dcff4addef86ea5bc2eff13c9614dc11f47ab1160d0a71a25e7db994f4e1f",
-    "weights": "IMAGENET1K_V1",
-    "frozen": true
-  }
+  ]
 }

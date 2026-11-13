@@ -18,7 +18,9 @@ def check():
         raise ValueError("Server and browser CT metadata differ")
     if hashlib.sha256((folder / "model.onnx").read_bytes()).hexdigest() != report["model_sha256"]:
         raise ValueError("CT export/report checksum mismatch")
-    if report["classes"] != ["comparator", "covid_associated"] or report["dataset"]["patient_disjoint"] is not False:
+    if (report["classes"] != ["comparator", "covid_associated"]
+            or report["dataset"]["patient_disjoint"] is not True
+            or report["dataset"]["split_unit"] != "patient_folder"):
         raise ValueError("Unexpected CT research schema or evaluation claim")
     for example in report["examples"]:
         if not (folder / example["file"]).is_file():

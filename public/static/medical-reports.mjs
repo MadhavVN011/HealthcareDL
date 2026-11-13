@@ -1,4 +1,4 @@
-import { interpretLabText, DEMO_LAB_TEXT } from "./medical-core.mjs";
+import { interpretLabText, LAB_DEMO_EXAMPLES } from "./medical-core.mjs";
 import { classifyCtPixels } from "./medical-imaging.mjs";
 
 const base = new URL("./", import.meta.url);
@@ -20,6 +20,27 @@ function errorText(error) {
 function setError(prefix, message) {
   byId(`${prefix}-error`).textContent = message;
   byId(`${prefix}-error`).hidden = !message;
+}
+
+function clearDemo(prefix) {
+  for (const button of document.querySelectorAll(`[data-${prefix}-example]`))
+    button.setAttribute("aria-pressed", "false");
+  byId(`${prefix}-example-notice`).hidden = true;
+  byId(`${prefix}-example-notice`).textContent = "";
+}
+
+function showDemo(prefix, button, source) {
+  clearDemo(prefix);
+  button.setAttribute("aria-pressed", "true");
+  const notice = byId(`${prefix}-example-notice`);
+  notice.textContent = `Demo example: ${button.dataset.exampleLabel} · ${source}`;
+  notice.hidden = false;
+  const heading = byId(prefix === "blood" ? "blood-results-title" : "ct-result-label");
+  heading.focus({ preventScroll: true });
+  byId(`${prefix}-results`).scrollIntoView({
+    behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+    block: "start",
+  });
 }
 
 async function fileKind(file, allowDocuments) {
@@ -233,6 +254,7 @@ async function readPdf(file, job) {
 
 byId("blood-controls").disabled = false;
 byId("blood-file").addEventListener("change", () => {
+  clearDemo("blood");
   byId("blood-text").value = "";
   byId("blood-source").textContent = "";
   byId("blood-rows").replaceChildren();
@@ -242,6 +264,7 @@ byId("blood-file").addEventListener("change", () => {
     "New file selected. Analyze it to extract its readings.";
 });
 byId("blood-text").addEventListener("input", () => {
+  clearDemo("blood");
   byId("blood-source").textContent = "";
   byId("blood-rows").replaceChildren();
   byId("blood-results").hidden = true;
@@ -249,6 +272,7 @@ byId("blood-text").addEventListener("input", () => {
 byId("blood-form").addEventListener("submit", async (event) => {
   event.preventDefault();
   const job = ++bloodJob;
+  clearDemo("blood");
   setError("blood", "");
   byId("blood-results").hidden = true;
   byId("blood-clear").hidden = false;
@@ -289,19 +313,26 @@ byId("blood-form").addEventListener("submit", async (event) => {
     if (job === bloodJob) byId("blood-controls").disabled = false;
   }
 });
-byId("blood-example").addEventListener("click", () => {
-  setError("blood", "");
-  byId("blood-file").value = "";
-  byId("blood-text").value = DEMO_LAB_TEXT;
-  renderLab(DEMO_LAB_TEXT, "Fictional example");
-  byId("blood-status").textContent =
-    "Fictional example analyzed using the same comparison rules as uploaded reports.";
-});
+for (const button of document.querySelectorAll("[data-blood-example]")) {
+  button.addEventListener("click", () => {
+    const text = LAB_DEMO_EXAMPLES[button.dataset.bloodExample];
+    if (typeof text !== "string") return;
+    bloodJob++;
+    setError("blood", "");
+    byId("blood-file").value = "";
+    byId("blood-text").value = text;
+    renderLab(text, "Fictional example");
+    showDemo("blood", button, "Fictional report");
+    byId("blood-status").textContent =
+      "Fictional example analyzed using the same comparison rules as uploaded reports.";
+  });
+}
 byId("blood-clear").addEventListener("click", () => {
   bloodJob++;
   activeWorker?.terminate();
   activePdf?.destroy();
   activeWorker = activePdf = null;
+  clearDemo("blood");
   byId("blood-file").value = byId("blood-text").value = "";
   byId("blood-source").textContent = "";
   byId("blood-rows").replaceChildren();
@@ -312,8 +343,9 @@ byId("blood-clear").addEventListener("click", () => {
     "Report and results cleared from this workspace.";
 });
 
-async function analyzeCt(file, example = null) {
+async function analyzeCt(file, exampleButton = null) {
   const job = ++ctJob;
+  clearDemo("ct");
   byId("ct-controls").disabled = true;
   byId("ct-clear").hidden = false;
   byId("ct-results").hidden = true;
@@ -357,13 +389,14 @@ async function analyzeCt(file, example = null) {
         ? "COVID-associated dataset pattern"
         : "Comparator dataset pattern";
     byId("ct-result-description").textContent =
-      `${example === null ? "Selected image." : "Published validation example."} ${uncertain ? "The model score is below the demonstration's 70% threshold. No class has been selected." : "This is a slice-level research classification, not a diagnosis or a complete scan interpretation."} The model cannot determine whether an image belongs to its supported domain.`;
+      `${exampleButton === null ? "Selected image." : "Published validation example."} ${uncertain ? "The model score is below the demonstration's 70% threshold. No class has been selected." : "This is a slice-level research classification, not a diagnosis or a complete scan interpretation."} The model cannot determine whether an image belongs to its supported domain.`;
     byId("ct-result-score").textContent = `${(score * 100).toFixed(1)}%`;
     byId("ct-result-accuracy").textContent =
       `${(metadata.test.accuracy * 100).toFixed(1)}%`;
     byId("ct-result-support").textContent =
-      `${metadata.test.count} held-out dataset images; not a patient-separated evaluation.`;
+      `${metadata.test.count} held-out images from ${metadata.partition_summary.test.patient_folders} publisher patient folders; no external clinical validation.`;
     byId("ct-results").hidden = false;
+    if (exampleButton) showDemo("ct", exampleButton, "Published validation image");
     byId("ct-status").textContent =
       "Local classification finished. Your image was not uploaded.";
   } catch (error) {
@@ -379,6 +412,7 @@ async function analyzeCt(file, example = null) {
 if (!byId("ct-controls").dataset.unavailable)
   byId("ct-controls").disabled = false;
 byId("ct-file").addEventListener("change", () => {
+  clearDemo("ct");
   byId("ct-results").hidden = true;
   byId("ct-confirm").checked = false;
   byId("ct-preview").removeAttribute("src");
@@ -396,6 +430,9 @@ for (const button of document.querySelectorAll("[data-ct-example]")) {
   button.addEventListener("click", async () => {
     const index = Number(button.dataset.ctExample);
     const job = ++ctJob;
+    clearDemo("ct");
+    setError("ct", "");
+    byId("ct-results").hidden = true;
     byId("ct-controls").disabled = true;
     byId("ct-clear").hidden = false;
     byId("ct-status").textContent = "Loading the published dataset example…";
@@ -408,7 +445,7 @@ for (const button of document.querySelectorAll("[data-ct-example]")) {
       if (job !== ctJob) return;
       byId("ct-file").value = "";
       byId("ct-confirm").checked = true;
-      await analyzeCt(blob, index);
+      await analyzeCt(blob, button);
     } catch (error) {
       if (job === ctJob) {
         setError("ct", errorText(error));
@@ -419,6 +456,7 @@ for (const button of document.querySelectorAll("[data-ct-example]")) {
 }
 byId("ct-clear").addEventListener("click", () => {
   ctJob++;
+  clearDemo("ct");
   byId("ct-file").value = "";
   byId("ct-confirm").checked = false;
   byId("ct-controls").disabled = Boolean(

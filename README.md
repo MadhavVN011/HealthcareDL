@@ -41,7 +41,7 @@ Training is deterministic on the tested CPU environment. Exact results across ot
 1. Validate binary features and normalize names. Combine duplicate `fluid_overload` columns using logical OR; this preserves the active column's signal.
 2. Resolve original disease spellings to stable IDs in `data/conditions.json` and reject contradictory labels.
 3. Remove duplicate patterns **before** partitioning. Split each category approximately 60/20/20 into training, validation, and test data. The default split has **182/61/61** unique patterns, with all 41 categories represented and no identical pattern shared between partitions.
-4. Train with mini-batches, AdamW, cross-entropy loss, and dropout. Select a checkpoint using validation loss with early stopping. Test examples are never used for gradient updates or checkpoint selection.
+4. Expand the training partition with **913 synthetic single-symptom deletion variants**, for **1,095 training examples**. Exclude all original patterns and ambiguous labels, keep at least three positive symptoms, and give synthetic variants at most half the total weight within each category. These are not additional patient records. Train with mini-batches, AdamW, cross-entropy loss, and dropout. Select a checkpoint using validation loss with early stopping. Test examples are never used for gradient updates or checkpoint selection.
 5. Evaluate the selected checkpoint on the held-out test set and compare with a linear SVC trained on the same training partition. The application always serves the neural network.
 
 Generated files:
@@ -93,12 +93,16 @@ Voice input is optional and fills the same submitted field. Unsupported browsers
 
 Open **Report analysis** in the navigation, or visit `/reports`.
 
-- **Blood reports:** choose an English-language PDF, PNG, JPEG, or text file. PDF text extraction and Tesseract LSTM OCR read supported test rows, then arithmetic compares the result with the range printed on that report. Missing, conflicting, or ambiguous values are flagged for review. This is not a blood-disease prediction model; no universal ranges or diagnoses are invented. A fictional example and downloadable sample files are included.
-- **Chest CT:** choose a single rendered axial chest CT slice in PNG/JPEG format. A separate CNN classifies COVID-associated versus comparator dataset patterns. Comparator does not mean healthy or COVID-negative. DICOM studies, X-rays, other body regions, and general radiology interpretation are not supported. Two published validation examples are available.
+- **Blood reports:** choose an English-language PDF, PNG, JPEG, or text file. PDF text extraction and Tesseract LSTM OCR read supported test rows, then arithmetic compares the result with the range printed on that report. Missing, conflicting, or ambiguous values are flagged for review. This is not a blood-disease prediction model; no universal ranges or diagnoses are invented. Three one-click fictional examples—**Mixed readings**, **Within printed ranges**, and **Needs review**—run immediately and show the comparison. Downloadable PDF and image samples remain available for file extraction.
+- **Chest CT / CAT scans:** choose a single rendered axial chest CT slice in PNG/JPEG format. A separate CNN classifies COVID-associated versus comparator dataset patterns. Comparator does not mean healthy or COVID-negative. DICOM studies, X-rays, other body regions, and general radiology interpretation are not supported. Two one-click cards show published validation-image previews and run the actual model.
+
+Example cards appear above the upload fields, use the same visual style as the symptom examples, and move focus to the result when finished. Each result identifies its example source. Running an example replaces the current input; choosing your own file clears the example selection.
 
 Files are processed in the current browser tab and are not uploaded or saved by the application. There are no paid inference API calls. The first CT run downloads about 19 MB of local model/runtime assets; mobile devices can take longer. Files are limited to 10 MB and PDFs to five pages. Report processing requires JavaScript and a browser with WebAssembly support.
 
-The CT model achieved **96.77% accuracy on 496 held-out images** after training on 1,487 images and selecting its checkpoint using 496 validation images. This is **not a patient-separated evaluation**: patient identifiers are unavailable in the downloaded archive, and related slices may cross partitions. No clinical accuracy is established. The CT percentages are separate from the symptom model's metrics.
+The CT training release now contains **4,169 unique images from 210 publisher patient folders**, up from 2,479 images. Patients are kept together in a **126 / 42 / 42 folder split** with **2,472 / 864 / 833 images**. The model achieved **83.67% accuracy on 833 images from the held-out 42 folders**. This stricter grouped evaluation is not directly comparable to the previous 96.77% image-split score, and does not establish external hospital performance or clinical accuracy. The CT percentages are separate from the symptom model's metrics.
+
+The compatible SymbiPredict candidate was audited and rejected: all 304 of its binary patterns already exist here. Symptom training expansion is explicitly synthetic; no additional symptom patient cohort is claimed. See [the expansion audit and fixed protocol](docs/DATA_EXPANSION.md).
 
 See [report analysis and reproducible training](docs/REPORT_ANALYSIS.md), [dependency/data attribution](docs/THIRD_PARTY.md), and [the workspace preview](docs/screenshots/reports.png).
 

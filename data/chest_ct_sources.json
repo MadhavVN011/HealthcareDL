@@ -1,13 +1,16 @@
 {
   "checked_on": "2026-11-11",
-  "title": "SARS-COV-2 Ct-Scan Dataset",
-  "publisher": "PlamenEduardo",
-  "source": "https://www.kaggle.com/datasets/plameneduardo/sarscov2-ctscan-dataset",
-  "download": "https://www.kaggle.com/api/v1/datasets/download/plameneduardo/sarscov2-ctscan-dataset",
-  "archive_bytes": 241684146,
-  "archive_sha256": "1df9c4555fbae535fb2ca97132a94eefa88e7092f24a94d5f254ab97c0846c2a",
-  "publisher_declared_license": "CC BY-NC-SA 4.0",
-  "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+  "title": "A large dataset of real patients CT scans for COVID-19 identification",
+  "publisher": "Eduardo Soares and Plamen Angelov",
+  "source": "https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/SZDUQX",
+  "doi": "10.7910/DVN/SZDUQX",
+  "file_doi": "10.7910/DVN/SZDUQX/RTVB06",
+  "download": "https://dataverse.harvard.edu/api/access/datafile/3877939?format=original&download=1",
+  "archive_bytes": 425113141,
+  "archive_sha256": "4b9bd9674a058c59274bf6d8a46efb8d0cf473b0434eeb5bbe9d5423e7145d87",
+  "publisher_md5": "a0e34cc70093445710d9ce3b470813e2",
+  "publisher_declared_license": "CC0-1.0",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
   "authors": [
     "Eduardo Soares",
     "Plamen Angelov",
@@ -16,15 +19,51 @@
     "Daniel Kanda Abe"
   ],
   "paper": "https://doi.org/10.1101/2020.04.24.20078584",
-  "original_images": 2482,
-  "unique_pixel_patterns": 2479,
-  "exact_duplicates_removed": 3,
-  "split_unit": "image",
-  "patient_disjoint": false,
+  "publisher_claimed_images": 4173,
+  "archive_entries": 4173,
+  "actual_images": 4171,
+  "non_image_entries_ignored": 2,
+  "unique_pixel_patterns": 4169,
+  "exact_duplicates_removed": 2,
+  "patient_folders": 210,
+  "split_unit": "patient_folder",
+  "patient_disjoint": true,
+  "grouping_note": "Separation uses publisher patient folders, not independently verified identities or external hospitals.",
   "example_changes": "Two validation images reencoded as PNG; input images are resized and normalized for inference.",
   "limitations": [
-    "Patient identifiers are not supplied with this downloaded archive; related patient slices may occur across partitions.",
-    "Publisher license declarations and source links are not clinical validation.",
-    "Original archive stays in an ignored local directory and is not redistributed."
-  ]
+    "Patient-folder grouping is supplied by the publisher, not independently verified.",
+    "An internal grouped split is not external hospital validation or evidence of clinical accuracy.",
+    "The archive contains a shortcut and text report; both are ignored and never opened by training.",
+    "The raw archive stays ignored and is not redistributed."
+  ],
+  "previous_release": {
+    "checked_on": "2026-11-11",
+    "title": "SARS-COV-2 Ct-Scan Dataset",
+    "publisher": "PlamenEduardo",
+    "source": "https://www.kaggle.com/datasets/plameneduardo/sarscov2-ctscan-dataset",
+    "download": "https://www.kaggle.com/api/v1/datasets/download/plameneduardo/sarscov2-ctscan-dataset",
+    "archive_bytes": 241684146,
+    "archive_sha256": "1df9c4555fbae535fb2ca97132a94eefa88e7092f24a94d5f254ab97c0846c2a",
+    "publisher_declared_license": "CC BY-NC-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "authors": [
+      "Eduardo Soares",
+      "Plamen Angelov",
+      "Sarah Biaso",
+      "Michele Higa Froes",
+      "Daniel Kanda Abe"
+    ],
+    "paper": "https://doi.org/10.1101/2020.04.24.20078584",
+    "original_images": 2482,
+    "unique_pixel_patterns": 2479,
+    "exact_duplicates_removed": 3,
+    "split_unit": "image",
+    "patient_disjoint": false,
+    "example_changes": "Two validation images reencoded as PNG; input images are resized and normalized for inference.",
+    "limitations": [
+      "Patient identifiers are not supplied with this downloaded archive; related patient slices may occur across partitions.",
+      "Publisher license declarations and source links are not clinical validation.",
+      "Original archive stays in an ignored local directory and is not redistributed."
+    ]
+  }
 }

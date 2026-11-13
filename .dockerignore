@@ -12,4 +12,5 @@ docs
 .vercel
 artifacts/chest_ct
 healthdl/chest_training.py
+healthdl/chest_data.py
 requirements-imaging-training.txt

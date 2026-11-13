@@ -1,6 +1,5 @@
 """Research-only chest CT transfer learning; never imported by the web runtime."""
 
-import hashlib
 import json
 import random
 import time
@@ -14,15 +13,14 @@ import torch
 import torchvision
 from torch import nn
 from sklearn.metrics import accuracy_score, balanced_accuracy_score, f1_score, roc_auc_score, confusion_matrix
-from sklearn.model_selection import train_test_split
 from torchvision.models import MobileNet_V3_Small_Weights, mobilenet_v3_small
 
 from .data import ROOT, file_hash
+from .chest_data import ARCHIVE_SHA256, SOURCE_URL, load_chest_dataset, split_chest_dataset, partition_summary
 
 CLASSES = ["comparator", "covid_associated"]
 MEAN = np.array([0.485, 0.456, 0.406], dtype=np.float32)
 STD = np.array([0.229, 0.224, 0.225], dtype=np.float32)
-ARCHIVE_SHA256 = "1df9c4555fbae535fb2ca97132a94eefa88e7092f24a94d5f254ab97c0846c2a"
 ENCODER_SHA256 = "047dcff4addef86ea5bc2eff13c9614dc11f47ab1160d0a71a25e7db994f4e1f"
 
 
@@ -65,36 +63,16 @@ def train_chest(archive_path, output, seed=20, epochs=180, patience=25):
     torch.set_num_threads(4)
     torch.use_deterministic_algorithms(True)
     output.mkdir(parents=True, exist_ok=True)
-    names, labels, hashes, seen = [], [], [], {}
-    with ZipFile(archive_path) as archive:
-        for name in sorted(archive.namelist()):
-            if not name.lower().endswith((".png", ".jpg", ".jpeg")):
-                continue
-            group = Path(name).parts[0]
-            if group not in {"COVID", "non-COVID"}:
-                continue
-            label = int(group == "COVID")
-            with Image.open(BytesIO(archive.read(name))) as image:
-                rgb = ImageOps.exif_transpose(image).convert("RGB")
-                digest = hashlib.sha256(str(rgb.size).encode() + rgb.tobytes()).hexdigest()
-            if digest in seen:
-                if seen[digest] != label:
-                    raise ValueError("Conflicting labels on identical CT images")
-                continue
-            seen[digest] = label
-            names.append(name)
-            labels.append(label)
-            hashes.append(digest)
-    labels = np.array(labels, dtype=np.int64)
-    ids = np.arange(len(names))
-    train, remainder = train_test_split(ids, test_size=0.4, random_state=seed, stratify=labels)
-    validation, test = train_test_split(remainder, test_size=0.5, random_state=seed, stratify=labels[remainder])
+    dataset = load_chest_dataset(archive_path)
+    names, labels, hashes = dataset.names, dataset.labels, dataset.hashes
+    split = split_chest_dataset(dataset, seed)
+    train, validation, test = (split[key] for key in ["train", "validation", "test"])
     model = ChestNetwork(pretrained=True).eval()
     if file_hash(Path(torch.hub.get_dir()) / "checkpoints/mobilenet_v3_small-047dcff4.pth") != ENCODER_SHA256:
         raise ValueError("The pretrained ImageNet encoder checksum does not match")
     for parameter in model.encoder.parameters():
         parameter.requires_grad_(False)
-    cache = archive_path.parent / "mobilenet_features.npz"
+    cache = archive_path.parent / "harvard_mobilenet_features.npz"
     if cache.exists():
         with np.load(cache, allow_pickle=False) as data:
             if data["hashes"].tolist() != hashes:
@@ -164,17 +142,20 @@ def train_chest(archive_path, output, seed=20, epochs=180, patience=25):
         "classes": CLASSES, "input_shape": [1, 3, 224, 224], "device": "cpu", "preprocessing": "half_pixel_bilinear_rgb_imagenet_normalization",
         "versions": {"torch": torch.__version__, "torchvision": torchvision.__version__, "numpy": np.__version__},
         "encoder": {"source": "https://download.pytorch.org/models/mobilenet_v3_small-047dcff4.pth", "sha256": ENCODER_SHA256, "weights": "IMAGENET1K_V1", "frozen": True},
-        "dataset": {"source": "https://www.kaggle.com/datasets/plameneduardo/sarscov2-ctscan-dataset",
-                    "license": "CC BY-NC-SA 4.0", "archive_sha256": ARCHIVE_SHA256, "unique_images": len(names),
-                    "split_unit": "image", "patient_disjoint": False},
+        "dataset": {"source": SOURCE_URL, "license": "CC0-1.0", "archive_sha256": ARCHIVE_SHA256,
+                    "raw_images": dataset.raw_images, "unique_images": len(names), "patient_folders": len(set(dataset.groups)),
+                    "duplicates_removed": dataset.raw_images - len(names), "split_unit": "patient_folder", "patient_disjoint": True,
+                    "grouping_note": "Separation uses publisher patient folders, not independently verified identities or external hospitals."},
         "split_sizes": {"train": len(train), "validation": len(validation), "test": len(test)},
+        "partition_summary": partition_summary(dataset, split),
+        "split_group_ids": {key: sorted({dataset.groups[int(i)] for i in indexes}) for key, indexes in split.items()},
         "split_hashes": {key: [hashes[int(i)] for i in indexes] for key, indexes in [("train", train), ("validation", validation), ("test", test)]},
         "best_epoch": best_epoch, "epochs_run": len(history), "history": history,
         "validation": metrics(validation), "test": metrics(test), "min_score": 0.7,
         "limitations": [
             "Research classifier for rendered axial chest CT slices; not a diagnosis or a complete CT interpretation.",
             "Comparator does not mean healthy, negative for COVID, or free of other disease.",
-            "Patient identifiers are unavailable; related slices from the same patient may cross image partitions. Scores may be optimistic.",
+            "Publisher patient folders are kept in separate partitions; folder identities have not been independently verified.",
             "Softmax outputs and abstention thresholds are uncalibrated. No clinical or external patient evaluation has been performed.",
             "Not trained for X-rays, photos, head CT, DICOM studies, tumors, emboli, or general lung findings.",
         ],
@@ -209,7 +190,7 @@ def train_chest(archive_path, output, seed=20, epochs=180, patience=25):
     report["model_sha256"] = file_hash(public / "model.onnx")
     report["examples"] = examples
     (output / "report.json").write_text(json.dumps(report, indent=2) + "\n")
-    summary = {key: value for key, value in report.items() if key not in {"split_hashes", "history"}}
+    summary = {key: value for key, value in report.items() if key not in {"split_hashes", "split_group_ids", "history"}}
     summary_text = json.dumps(summary, indent=2) + "\n"
     (public / "report.json").write_text(summary_text)
     runtime_report = (ROOT / "artifacts/chest_ct_runtime.json"

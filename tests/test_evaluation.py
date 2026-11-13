@@ -29,6 +29,22 @@ def test_original_data_is_rejected_as_external():
     assert "classifier" not in result
 
 
+def test_synthetic_training_variants_are_also_rejected_as_external(tmp_path, dataset):
+    from healthdl.data import pattern_id, split_dataset
+    from healthdl.training import augment_training
+    extra, labels, _ = augment_training(dataset, split_dataset(dataset)["train"])
+    assert pattern_id(extra[0]) not in {pattern_id(row) for row in dataset.x}
+    path = tmp_path / "synthetic.csv"
+    with path.open("w", newline="") as stream:
+        writer = csv.writer(stream)
+        writer.writerow([*dataset.features, "prognosis"])
+        writer.writerow([*extra[0], dataset.class_ids[labels[0]]])
+    result = evaluate_external(path)
+    assert result["status"] == "rejected_overlap"
+    assert result["overlapping_rows"] == 1
+    assert "classifier" not in result
+
+
 def test_external_schema_and_binary_validation(tmp_path, dataset):
     with pytest.raises(ValueError, match="schema"):
         evaluate_external(write_external(tmp_path, dataset, missing=True), group_column="patient_id")
